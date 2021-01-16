@@ -4,15 +4,28 @@ import router from './router'
 import store from './store'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-
-// Import Bootstrap an BootstrapVue CSS files (order is important)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
-// Make BootstrapVue available throughout your project
 Vue.use(BootstrapVue)
-// Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
+
+import Parse from 'parse'
+Vue.prototype.$parseAppId = 'bXXXBwI0yPdP41daYTIcSTBU5LoJOQ2Q8JYOpfj5';
+Vue.prototype.$parseJsKey = 'rdCXaBV9yLuCm0AxFhv4w3Zwp3VJODV0F5xf5qiK';
+Vue.prototype.$parseServerURL = 'rudiboard.b4a.io';
+Parse.initialize(Vue.prototype.$parseAppId, Vue.prototype.$parseJsKey);
+Parse.serverURL = 'https://' + Vue.prototype.$parseServerURL
+Vue.prototype.$Parse = Parse 
+/*
+// test parse connection
+new Parse.Object("Test", {"text" : "testing"}).save()
+.then(function (obj) {
+console.log("Success", obj);
+})
+.catch(function (e) {
+alert("Error saving test object!" + e.message);
+});*/
+
 
 Vue.config.productionTip = false
 
