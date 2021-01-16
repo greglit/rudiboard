@@ -1,16 +1,17 @@
 <template>
   <div>
+      <h1>Board {{$route.params.boardId}}</h1>
       <div :key="'game'+game.objectId+key" v-for="(game, key) in games" class="tdFadeInUp">
         <game-card :game="game"/>
       </div>
-      <add-game/>
+      <add-game />
   </div>
 </template>
 
 <script>
 import Parse from 'parse'
-import AddGame from './AddGame.vue'
-import GameCard from './GameCard.vue'
+import AddGame from '../components/AddGame'
+import GameCard from '../components/GameCard'
 
 export default {
   name: 'Board',
@@ -28,6 +29,7 @@ export default {
     this.getGames()
 
     var query = new this.$Parse.Query('Game');
+    query.equalTo("boardId", this.$route.params.boardId)
     let subscription = await query.subscribe();
     subscription.on('create', game => {
       this.getGames()
@@ -39,7 +41,7 @@ export default {
   methods: {
     async getGames() {
       var query = new this.$Parse.Query('Game');
-      query.ascending('createdAt');//.limit(this.numberGamesDisplayed);
+      query.equalTo("boardId", this.$route.params.boardId).ascending('createdAt');//.limit(this.numberGamesDisplayed);
       this.games = await query.find();
     }
   }

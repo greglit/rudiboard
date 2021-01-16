@@ -13,6 +13,7 @@ export default {
   name: 'AddGame',
   data() {
     return {
+      boardId: this.$route.params.boardId,
       team1: '',
       team2: '',
       team1Score: '',
@@ -21,13 +22,7 @@ export default {
   },
   methods: {
     addGame() {
-      new this.$Parse.Object("Game", this.$data).save()
-      .then(function (obj) {
-      //console.log("Success", obj);
-      })
-      .catch(function (e) {
-      alert("Error saving test object!" + e.message);
-      });
+      new this.$Parse.Object("Game", this.$data).save();
     }
   },
 }
