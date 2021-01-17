@@ -1,10 +1,20 @@
 <template>
   <div>
-      <h1>Board {{$route.params.boardId}}</h1>
-      <div :key="'game'+game.objectId+key" v-for="(game, key) in games" class="tdFadeInUp">
-        <game-card :game="game"/>
+    <b-container>
+      <div v-if="!loading">
+        <h1 class="my-4">Board "{{board.get('boardName')}}"  ID:{{$route.params.boardId}}</h1>
+        <add-game />
+        <div :key="'game'+game.objectId+key" v-for="(game, key) in games.slice().reverse()" :class="isNew(game) ?'tdFadeInUp':''">
+          <game-card :game="game"/>
+        </div>
       </div>
-      <add-game />
+
+      <b-card v-else class="mt-4">
+        <b-skeleton width="85%"></b-skeleton>
+        <b-skeleton width="55%"></b-skeleton>
+        <b-skeleton width="70%"></b-skeleton>
+      </b-card>
+    </b-container>
   </div>
 </template>
 
@@ -21,28 +31,51 @@ export default {
   },
   data() {
     return {
+      loading: true,
       numberGamesDisplayed: 5,
-      games: []
+      games: [],
+      board: Object,
     }
   },
+  created () {
+    this.loading = true;
+    this.fetchData()
+  },
+  watch: {
+    // call again the method if the route changes
+    '$route': 'fetchData'
+  },
   async mounted() {
-    this.getGames()
-
     var query = new this.$Parse.Query('Game');
     query.equalTo("boardId", this.$route.params.boardId)
     let subscription = await query.subscribe();
     subscription.on('create', game => {
-      this.getGames()
+      this.fetchData()
     });
     subscription.on('delete', game => {
-      this.getGames()
+      this.fetchData()
     });
   },
   methods: {
-    async getGames() {
-      var query = new this.$Parse.Query('Game');
-      query.equalTo("boardId", this.$route.params.boardId).ascending('createdAt');//.limit(this.numberGamesDisplayed);
-      this.games = await query.find();
+    async fetchData() {
+      var gameQuery = new this.$Parse.Query('Game');
+      gameQuery.equalTo("boardId", this.$route.params.boardId).ascending('createdAt');//.limit(this.numberGamesDisplayed);
+      this.games = await gameQuery.find();
+
+      var boardQuery = new this.$Parse.Query('Board');
+      boardQuery.equalTo("boardId", this.$route.params.boardId);
+      var boardQueryResult = await boardQuery.find();
+      this.board = boardQueryResult[0]
+      this.loading = false;
+    },
+    isNew(game) {
+      let createdAt = game.get('createdAt');
+      let tenSecondsAgo = Date.now() - 10 * 1000 //millliseconds
+      if (createdAt > tenSecondsAgo) {
+        var snd = new Audio('/notify2.wav');
+        snd.play();
+        return true;
+      }
     }
   }
 }

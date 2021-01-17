@@ -16,16 +16,6 @@ Vue.prototype.$parseServerURL = 'rudiboard.b4a.io';
 Parse.initialize(Vue.prototype.$parseAppId, Vue.prototype.$parseJsKey);
 Parse.serverURL = 'https://' + Vue.prototype.$parseServerURL
 Vue.prototype.$Parse = Parse 
-/*
-// test parse connection
-new Parse.Object("Test", {"text" : "testing"}).save()
-.then(function (obj) {
-console.log("Success", obj);
-})
-.catch(function (e) {
-alert("Error saving test object!" + e.message);
-});*/
-
 
 Vue.config.productionTip = false
 

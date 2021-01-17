@@ -22,10 +22,10 @@
             <b-button variant="success" size="lg" @click="joinBoard()">Join!</b-button>
           </b-form>
         </b-col>
-        <b-col class="border-left">
+        <b-col class="border-left border-secondary">
           <h2  class="text-right">... or create a new one.</h2>
           <b-form inline class="float-right">
-            <b-form-input size="lg" class="mr-2" v-model="createBoardName" placeholder="enter score board name"></b-form-input>
+            <b-form-input size="lg" class="mr-2" v-model="newBoardName" placeholder="enter score board name"></b-form-input>
             <b-button variant="success" size="lg" @click="createBoard()">Create!</b-button>
           </b-form>
           
@@ -44,12 +44,24 @@ export default {
   data() {
     return {
       joinBoardID : '',
-      createBoardName : '',
+      newBoardName : '',
     }
   },
   methods: {
     joinBoard() {
       this.$router.push('board/'+this.joinBoardID)
+    },
+    createBoard() {
+      var board = new this.$Parse.Object('Board', {
+        boardName: this.newBoardName, 
+        boardId: Math.random().toString(36).substr(2, 5),
+      });
+      board.save()
+      .then((board) => {
+        this.$router.push('board/'+board.get("boardId"));
+      }, (error) => {
+        alert('Failed to create new board, with error code: ' + error.message);
+      });
     }
   }
 }
