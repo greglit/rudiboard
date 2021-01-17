@@ -19,14 +19,14 @@
           <h2 class="text-left">Join an existing score board</h2>
           <b-form inline>
             <b-form-input size="lg" class="mr-2" v-model="joinBoardID" placeholder="enter board code"></b-form-input>
-            <b-button variant="success" size="lg" @click="joinBoard()">Join!</b-button>
+            <b-button variant="success" size="lg" class="mt-2" @click="joinBoard()">Join!</b-button>
           </b-form>
         </b-col>
         <b-col class="border-left border-secondary">
           <h2  class="text-right">... or create a new one.</h2>
           <b-form inline class="float-right">
             <b-form-input size="lg" class="mr-2" v-model="newBoardName" placeholder="enter score board name"></b-form-input>
-            <b-button variant="success" size="lg" @click="createBoard()">Create!</b-button>
+            <b-button variant="success" size="lg" class="mt-2" @click="createBoard()">Create!</b-button>
           </b-form>
           
         </b-col>

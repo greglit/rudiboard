@@ -28,7 +28,11 @@ export default {
   methods: {
       deleteGame() {
         if (confirm(`Are you sure you want to delete the game ${this.game.get("team1")} vs. ${this.game.get("team2")} ${this.game.get("team1Score")}:${this.game.get("team2Score")}`)) {
-            this.game.destroy()
+          this.game.destroy().then((game) => {
+            console.log(`Game succesfully destroyed.`)
+          }, (error) => {
+            alert('Failed to destroy game, with error code: ' + error.message);
+          });
         }
       }
   },

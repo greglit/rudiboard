@@ -4,7 +4,7 @@
       <div v-if="!loading">
         <h1 class="my-4">Board "{{board.get('boardName')}}"  ID:{{$route.params.boardId}}</h1>
         <add-game />
-        <div :key="'game'+game.objectId+key" v-for="(game, key) in games.slice().reverse()" :class="isNew(game) ?'tdFadeInUp':''">
+        <div :key="'game'+game.objectId+key" v-for="(game, key) in games.slice().reverse()" :class="game.id == newestGameId ?'tdFadeInUp':''">
           <game-card :game="game"/>
         </div>
       </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Parse from 'parse'
+import {Howl} from 'howler';
 import AddGame from '../components/AddGame'
 import GameCard from '../components/GameCard'
 
@@ -35,10 +35,13 @@ export default {
       numberGamesDisplayed: 5,
       games: [],
       board: Object,
+      notifySound: Object,
+      newestGameId: String,
     }
   },
   created () {
     this.loading = true;
+    this.notifySound = new Howl({ src: ['notify.mp3'] })
     this.fetchData()
   },
   watch: {
@@ -50,7 +53,9 @@ export default {
     query.equalTo("boardId", this.$route.params.boardId)
     let subscription = await query.subscribe();
     subscription.on('create', game => {
-      this.fetchData()
+      this.notifySound.play();
+      this.newestGameId = game.id;
+      this.games.push(game);
     });
     subscription.on('delete', game => {
       this.fetchData()
@@ -68,15 +73,15 @@ export default {
       this.board = boardQueryResult[0]
       this.loading = false;
     },
-    isNew(game) {
+    isNew(game) { //:class="isNew(game) ?'tdFadeInUp':''"
       let createdAt = game.get('createdAt');
       let tenSecondsAgo = Date.now() - 10 * 1000 //millliseconds
       if (createdAt > tenSecondsAgo) {
-        var snd = new Audio('/notify2.wav');
-        snd.play();
+        console.log("new!")
+        this.notifySound.play();
         return true;
       }
-    }
+    },
   }
 }
 </script>

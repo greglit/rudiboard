@@ -1,12 +1,15 @@
 <template>
   <div>
     <b-card bg-variant="light" class="mb-4">
-      <b-form inline>
-        <b-form-input v-model="team1" placeholder="name team 1" class="b-inline"></b-form-input>vs.
-        <b-form-input v-model="team2" placeholder="name team 2" class="b-inline"></b-form-input><br>
-        <b-form-input v-model="team1Score" placeholder="score team 1" class="b-inline"></b-form-input>:
-        <b-form-input v-model="team2Score" placeholder="score team 2" class="b-inline"></b-form-input><br>
-        <b-button @click="addGame()" class="float-right">Add Game</b-button>
+      <b-form>
+        <b-form-input v-model="team1" placeholder="name team 1" class=""></b-form-input>
+        <span class="mx-auto">vs.</span>
+        <b-form-input v-model="team2" placeholder="name team 2" class="mb-4"></b-form-input>
+        
+        <b-form-input v-model="team1Score" placeholder="score team 1" class=""></b-form-input>
+        <span class="mx-auto">:</span>
+        <b-form-input v-model="team2Score" placeholder="score team 2" class=""></b-form-input><br>
+        <b-button @click="addGame()" class="">Add Game</b-button>
       </b-form>
     </b-card>
   </div>
