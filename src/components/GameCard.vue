@@ -4,17 +4,21 @@
       <span class="float-right delete" @click="deleteGame()">
         <b-icon-trash-fill/>
       </span>
-      {{game.get("team1")}} vs. {{game.get("team2")}} <br>
+      <team-list :team="game.get('team1')" class="b-inline"/>
+      vs.
+      <team-list :team="game.get('team2')" class="b-inline"/><br>
       {{game.get("team1Score")}} : {{game.get("team2Score")}}
     </b-alert>
   </div>
 </template>
 
 <script>
+import TeamList from './TeamList.vue';
 
 export default {
   name: "GameCard",
   components: {
+    TeamList
   },
   props: {
     game: Object, //objectId, team1, team2, team1Score, team2Score

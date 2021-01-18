@@ -1,19 +1,23 @@
 <template>
   <div>
     <b-container>
-      <div v-if="!loading">
+      <div v-if="loading">
+        <b-card class="mt-4">
+          <b-skeleton width="85%"></b-skeleton>
+          <b-skeleton width="55%"></b-skeleton>
+          <b-skeleton width="70%"></b-skeleton>
+        </b-card>
+      </div>
+
+      <div v-else>
         <h1 class="my-4">Board "{{board.get('boardName')}}"  ID:{{$route.params.boardId}}</h1>
+        
         <add-game />
         <div :key="'game'+game.objectId+key" v-for="(game, key) in games.slice().reverse()" :class="game.id == newestGameId ?'tdFadeInUp':''">
           <game-card :game="game"/>
         </div>
       </div>
-
-      <b-card v-else class="mt-4">
-        <b-skeleton width="85%"></b-skeleton>
-        <b-skeleton width="55%"></b-skeleton>
-        <b-skeleton width="70%"></b-skeleton>
-      </b-card>
+      
     </b-container>
   </div>
 </template>

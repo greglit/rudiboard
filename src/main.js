@@ -19,6 +19,20 @@ Vue.prototype.$Parse = Parse
 
 Vue.config.productionTip = false
 
+// Mixins
+Vue.mixin({
+  methods: {
+    getTeamNameList(team) {
+      var teamNameList = ''
+      for (const [i, name] of team.entries()) {
+        teamNameList += name;
+        teamNameList += i != team.length-1 ? ', ' : '';
+      }
+      return teamNameList;
+    }
+  },
+})
+
 new Vue({
   router,
   store,
