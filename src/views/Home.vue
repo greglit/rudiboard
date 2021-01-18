@@ -1,13 +1,7 @@
 <template>
   <div class="home">
-    <b-navbar variant="light" type="light">
-      <b-container>
-        <b-navbar-brand href="#">
-          <img src="../assets/logo.png" class="d-inline-block align-top logo" alt="rudiboard">
-          rudiboard
-        </b-navbar-brand>
-      </b-container>
-    </b-navbar>
+    <navbar brandname>
+    </navbar>
     <b-container>
       <b-row class="mt-5">
         <b-col>
@@ -17,18 +11,24 @@
       <b-row  class="mt-5">
         <b-col>
           <h2 class="text-left">Join an existing score board</h2>
-          <b-form inline>
-            <b-form-input size="lg" class="mr-2" v-model="joinBoardID" placeholder="enter board code"></b-form-input>
+          <b-form>
+            <b-form-group valid-feedback="" invalid-feedback="Oops! We couldn't find a board with this board code, maybe a typo?" :state="!boardNotFound">
+              <b-form-input size="lg" class="" v-model="joinBoardID" placeholder="enter board code" @update="boardNotFound=false;"></b-form-input>
+            </b-form-group>
             <b-button variant="success" size="lg" @click="joinBoard()">Join!</b-button>
           </b-form>
         </b-col>
-        <b-col class="border-left border-secondary">
-          <h2  class="text-right">... or create a new one.</h2>
-          <b-form inline class="float-right">
-            <b-form-input size="lg" class="mr-2" v-model="newBoardName" placeholder="enter score board name"></b-form-input>
+      </b-row>
+      <hr>
+      <b-row>
+        <b-col>
+          <h2  class="text-left">... or create a new one.</h2>
+          <b-form>
+            <b-form-group>
+              <b-form-input size="lg" class="" v-model="newBoardName" placeholder="enter score board name"></b-form-input>
+            </b-form-group>
             <b-button variant="success" size="lg" @click="createBoard()">Create!</b-button>
           </b-form>
-          
         </b-col>
       </b-row>
     </b-container>
@@ -36,20 +36,34 @@
 </template>
 
 <script>
+import Navbar from '../components/Navbar.vue';
 
 export default {
   name: 'Home',
   components: {
+    Navbar
   },
   data() {
     return {
       joinBoardID : '',
       newBoardName : '',
+      boardNotFound : false,
     }
   },
   methods: {
-    joinBoard() {
-      this.$router.push('board/'+this.joinBoardID)
+    async joinBoard() {
+      var boardQuery = new this.$Parse.Query('Board');
+      boardQuery.equalTo("boardId", this.joinBoardID);
+      var boardQueryResult = await boardQuery.find();
+      if (boardQueryResult != 0) {
+        console.log('boardfound')
+        var board = boardQueryResult[0]
+        this.$router.push(`board/${board.get('boardName')}/${board.get("boardId")}`)
+      } else {
+        console.log('boardnotfound')
+        this.boardNotFound = true;
+      }
+      
     },
     createBoard() {
       var board = new this.$Parse.Object('Board', {
@@ -58,7 +72,7 @@ export default {
       });
       board.save()
       .then((board) => {
-        this.$router.push('board/'+board.get("boardId"));
+        this.$router.push(`board/${board.get('boardName')}/${board.get("boardId")}`);
       }, (error) => {
         alert('Failed to create new board, with error code: ' + error.message);
       });
@@ -68,8 +82,4 @@ export default {
 </script>
 
 <style scoped>
-.logo {
-  height: 30px;
-  width: 30px;
-}
 </style>
