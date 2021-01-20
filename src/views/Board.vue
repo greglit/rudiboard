@@ -1,25 +1,28 @@
 <template>
   <div>
     <navbar>
-      <h2 class="text-center">{{$route.params.boardName}}</h2>
+      <h3 class="text-center">{{$route.params.boardName}}</h3>
       <b-icon-share-fill class="float-right" v-b-modal.shareModal/>
     </navbar>
     <b-modal hide-footer size="lg" id="shareModal" title="Share this board with others">
-        ID:{{$route.params.boardId}}
-      </b-modal>
-    <b-container>
+      ID:{{$route.params.boardId}}
+    </b-modal>
+    <b-container class="mt-4 px-md-0">
       <div v-if="loading">
-        <b-card class="mt-4">
+        <b-card>
           <b-skeleton width="85%"></b-skeleton>
           <b-skeleton width="55%"></b-skeleton>
           <b-skeleton width="70%"></b-skeleton>
         </b-card>
       </div>
-      <div v-else class="mt-4">
-        <add-game />
-        <div :key="'game'+game.objectId+key" v-for="(game, key) in games.slice().reverse()" :class="game.id == newestGameId ?'tdFadeInUp':''">
-          <game-card :game="game"/>
-        </div>
+      <div v-else>
+
+        <add-game :players="playerList" class="mb-4 mr-0"/>
+
+        <game-list :games="games" :newestGameId="newestGameId" class="mb-4"/>
+
+        <score-table :games="games" :players="playerList"/>
+
       </div>
       
     </b-container>
@@ -31,6 +34,8 @@ import {Howl} from 'howler';
 import AddGame from '../components/AddGame'
 import GameCard from '../components/GameCard'
 import Navbar from '../components/Navbar.vue';
+import GameList from '../components/GameList.vue';
+import ScoreTable from '../components/ScoreTable.vue';
 
 export default {
   name: 'Board',
@@ -38,11 +43,12 @@ export default {
     AddGame,
     GameCard,
     Navbar,
+    GameList,
+    ScoreTable,
   },
   data() {
     return {
       loading: true,
-      numberGamesDisplayed: 5,
       games: [],
       board: Object,
       notifySound: Object,
@@ -65,16 +71,30 @@ export default {
     subscription.on('create', game => {
       this.notifySound.play();
       this.newestGameId = game.id;
-      this.games.push(game);
+      this.fetchData()
     });
     subscription.on('delete', game => {
       this.fetchData()
     });
   },
+  computed: {
+    playerList() {
+      var playerList = [];
+      for (const game of this.games) {
+        var players = game.get('team1').concat(game.get('team2'));
+        for (const player of players){
+          if (playerList.indexOf(player) === -1) {
+            playerList.push(player);
+          }
+        }
+      }
+      return playerList;
+    }
+  },
   methods: {
     async fetchData() {
       var gameQuery = new this.$Parse.Query('Game');
-      gameQuery.equalTo("boardId", this.$route.params.boardId).ascending('createdAt');//.limit(this.numberGamesDisplayed);
+      gameQuery.equalTo("boardId", this.$route.params.boardId).descending('createdAt');
       this.games = await gameQuery.find();
 
       var boardQuery = new this.$Parse.Query('Board');

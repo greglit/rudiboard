@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card bg-variant="light" class="mb-4">
+    <b-card bg-variant="light">
       <b-form>
         <vue-tags-input
           v-model="team1current"
@@ -37,6 +37,7 @@ export default {
   components: {
     VueTagsInput,
   },
+  props: ['players'],
   data() {
     return {
       boardId: this.$route.params.boardId,
@@ -46,17 +47,6 @@ export default {
       team2current: '',
       team1Score: '',
       team2Score: '',
-      autocompleteItems: [{
-        text: 'Gregor',
-      }, {
-        text: 'Pia',
-      }, {
-        text: 'Lukas',
-      }, {
-        text: 'Lena',
-      }, {
-        text: 'Davina',
-      }],
     }
   },
   computed: {
@@ -64,6 +54,11 @@ export default {
       return this.autocompleteItems.filter(i => {
         let tag = this.team1current != '' ? this.team1current : this.team2current;
         return i.text.toLowerCase().indexOf(tag.toLowerCase()) !== -1;
+      });
+    },
+    autocompleteItems() {
+      return this.players.map(i => {
+        return { text: i};
       });
     },
   },
