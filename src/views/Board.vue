@@ -3,7 +3,7 @@
     <navbar>
       <b-navbar-nav class="abs-center-x">
         <b-nav-text>
-          <h2 class="text-center mb-0 board-title">{{$route.params.boardName}}</h2>
+          <h1 class="text-center mb-0 board-title marker">{{$route.params.boardName}}</h1>
         </b-nav-text>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto m-n1">

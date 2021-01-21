@@ -1,28 +1,7 @@
 <template>
   <div>
-    <b-navbar class="border-top p-0">
-    <b-navbar-nav>
-      <b-nav-text>
-        <h2  style="color:black">Games</h2>
-      </b-nav-text>
-    </b-navbar-nav>
-    <b-navbar-nav class="ml-auto">
-      <b-nav-item right>
-        <b-button variant="outline-secondary" size="sm" @click="showAll = !showAll">
-          <div v-if="!showAll">
-            Show more
-            <b-icon-arrow-down/>
-          </div>
-          <div v-else>
-            Show less
-            <b-icon-arrow-up/>
-          </div>
-        </b-button>
-      </b-nav-item>
-    </b-navbar-nav>
-    </b-navbar>
-    
-    
+    <section-nav title="Games" :showMore.sync="showMore" />
+
     <div :key="'game'+game.objectId+key" v-for="(game, key) in displayedGames" :class="game.id == newestGameId ?'tdFadeInUp':''">
       <game-card :game="game"/>
     </div>
@@ -31,21 +10,24 @@
 
 <script>
 import GameCard from './GameCard.vue'
+import SectionNav from './SectionNav.vue'
+
 export default {
   components: { 
     GameCard,
+    SectionNav,
   },
   name: 'GameList',
   props: ['games', 'newestGameId'],
   data() {
     return {
-      showAll: false,
+      showMore: false,
       numberGamesDisplayed: 3,
     }
   },
   computed: {
     displayedGames() {
-      if (this.showAll) {
+      if (this.showMore) {
         return this.games
       } else {
         return this.games.slice(0, this.numberGamesDisplayed);

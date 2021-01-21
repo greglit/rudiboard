@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-alert show fade class="p-1">
+    <b-alert variant="primary" show fade class="p-1">
       <span class="float-left date">{{getDateAsString(game.get('createdAt'))}}</span>
       <span class="float-right delete" @click="deleteGame()">
         <b-icon-trash-fill/>

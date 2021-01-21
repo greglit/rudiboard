@@ -5,7 +5,11 @@
   </div>
 </template>
 
-<style>
+<style lang="scss">
+@import './assets/styles/custom.scss';
+@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/bootstrap-vue/src/index.scss';
+
 @font-face {
   font-family: "RoastChicken";
   src: local("RoastChicken"),   url(./assets/fonts/RoastChicken.ttf) format("truetype");
@@ -23,7 +27,7 @@
   color: #2c3e50;
 }
 
-h2 {
+.marker {
   font-family: TragicMarker, Helvetica, Arial, sans-serif;
 }
 </style>

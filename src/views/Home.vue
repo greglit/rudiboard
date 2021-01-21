@@ -5,7 +5,7 @@
     <b-container>
       <b-row class="mt-5">
         <b-col>
-          <h1 class="text-center">This is rudiboard, it's awesome! :D</h1>
+          <h1 class="text-center marker display-4">This is rudiboard, it's awesome! :D</h1>
         </b-col>
       </b-row>
       <b-row  class="mt-5">
@@ -81,5 +81,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  
 </style>

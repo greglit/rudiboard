@@ -1,26 +1,6 @@
 <template>
   <div>
-    <b-navbar class="border-top p-0">
-    <b-navbar-nav>
-      <b-nav-text>
-        <h2 style="color:black">Player Standings</h2>
-      </b-nav-text>
-    </b-navbar-nav>
-    <b-navbar-nav class="ml-auto">
-      <b-nav-item right>
-        <b-button variant="outline-secondary" size="sm" @click="showAll = !showAll">
-          <div v-if="!showAll">
-            Show more
-            <b-icon-arrow-down/>
-          </div>
-          <div v-else>
-            Show less
-            <b-icon-arrow-up/>
-          </div>
-        </b-button>
-      </b-nav-item>
-    </b-navbar-nav>
-    </b-navbar>
+    <section-nav title="Player Standings" :showMore.sync="showMore" />
     
     <div style="overflow:hidden">
       <b-table responsive
@@ -39,15 +19,18 @@
 
 <script>
 import GameCard from './GameCard.vue'
+import SectionNav from './SectionNav.vue'
+
 export default {
   components: { 
     GameCard,
+    SectionNav,
   },
   name: 'ScoreTable',
   props: ['games', 'players'],
   data() {
     return {
-      showAll: false,
+      showMore: false,
       numberItemsDisplayed: 5,
       sortBy: 'points',
       sortDesc: true,
@@ -66,7 +49,7 @@ export default {
   },
   computed: {
     displayedItems() {
-      if (this.showAll) {
+      if (this.showMore) {
         return this.items
       } else {
         return this.items.slice(0, this.numberItemsDisplayed);
