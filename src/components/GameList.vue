@@ -3,7 +3,7 @@
     <b-navbar class="border-top p-0">
     <b-navbar-nav>
       <b-nav-text>
-        <h4 class="">Games</h4>
+        <h2  style="color:black">Games</h2>
       </b-nav-text>
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto">
@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       showAll: false,
-      numberGamesDisplayed: 5,
+      numberGamesDisplayed: 3,
     }
   },
   computed: {

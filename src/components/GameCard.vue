@@ -1,13 +1,30 @@
 <template>
   <div>
-    <b-alert show fade>
+    <b-alert show fade class="p-1">
+      <span class="float-left date">{{getDateAsString(game.get('createdAt'))}}</span>
       <span class="float-right delete" @click="deleteGame()">
         <b-icon-trash-fill/>
       </span>
-      <team-list :team="game.get('team1')" class="b-inline"/>
-      vs.
-      <team-list :team="game.get('team2')" class="b-inline"/><br>
-      {{game.get("team1Score")}} : {{game.get("team2Score")}}
+      <b-container class="mt-4 pb-0 px-0">
+      <b-row class="m-1">
+        <b-col class="px-1">
+          <team-list :team="game.get('team1')" class="float-right"/>
+        </b-col>
+        <b-col cols="1" class="p-0">vs.</b-col>
+        <b-col class="px-1">
+          <team-list :team="game.get('team2')" class="float-left"/>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col class="px-1">
+          <span class="float-right">{{game.get("team1Score")}}</span>
+        </b-col>
+        <b-col cols="1" class="p-0">:</b-col>
+        <b-col class="px-1">
+          <span class="float-left">{{game.get("team2Score")}}</span>
+        </b-col>
+      </b-row>
+      </b-container>
     </b-alert>
   </div>
 </template>
@@ -45,10 +62,20 @@ export default {
 
 <style scoped>
 .delete {
-    color: rgb(94, 94, 94);
+  color: rgb(94, 94, 94);
+  position: absolute;
+  top: 4px;
+  right: 8px;
 }
 .delete:hover {
-    cursor: pointer;
-    color: rgb(39, 39, 39);
+  cursor: pointer;
+  color: rgb(39, 39, 39);
+}
+.date {
+  font-size: 10pt;
+  color: gray;
+  position: absolute;
+  top: 4px;
+  left: 8px;
 }
 </style>

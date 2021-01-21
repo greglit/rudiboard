@@ -3,7 +3,7 @@
     <b-navbar class="border-top p-0">
     <b-navbar-nav>
       <b-nav-text>
-        <h4 class="">Player Standings</h4>
+        <h2 style="color:black">Player Standings</h2>
       </b-nav-text>
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto">

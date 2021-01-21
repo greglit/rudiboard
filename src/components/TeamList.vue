@@ -1,6 +1,6 @@
 <template>
   <span>
-    <b-badge pill :key="key" v-for="(name, key) in team" class="mr-1" :href="'/player/'+name">
+    <b-badge :key="key" v-for="(name, key) in team" class="mr-1" :href="'/player/'+name">
         {{name}}
     </b-badge>
   </span>

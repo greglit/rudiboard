@@ -1,8 +1,20 @@
 <template>
   <div>
     <navbar>
-      <h3 class="text-center">{{$route.params.boardName}}</h3>
-      <b-icon-share-fill class="float-right" v-b-modal.shareModal/>
+      <b-navbar-nav class="abs-center-x">
+        <b-nav-text>
+          <h2 class="text-center mb-0 board-title">{{$route.params.boardName}}</h2>
+        </b-nav-text>
+      </b-navbar-nav>
+      <b-navbar-nav class="ml-auto m-n1">
+        <b-nav-item right>
+          <b-button variant="secondary border-0" size="sm" v-b-modal.shareModal>
+            <b-icon-share-fill/>
+          </b-button>
+        </b-nav-item>
+      </b-navbar-nav>
+      
+      
     </navbar>
     <b-modal hide-footer size="lg" id="shareModal" title="Share this board with others">
       ID:{{$route.params.boardId}}
@@ -117,6 +129,15 @@ export default {
 </script>
 
 <style scoped>
+  .board-title {
+    color: white;
+  }
+
+  .abs-center-x {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
   .tdFadeInUp {
     -webkit-animation-duration: 0.4s;

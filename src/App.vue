@@ -6,6 +6,15 @@
 </template>
 
 <style>
+@font-face {
+  font-family: "RoastChicken";
+  src: local("RoastChicken"),   url(./assets/fonts/RoastChicken.ttf) format("truetype");
+}
+@font-face {
+  font-family: "TragicMarker";
+  src: local("TragicMarker"),   url(./assets/fonts/TragicMarker.otf) format("opentype");
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -14,16 +23,7 @@
   color: #2c3e50;
 }
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+h2 {
+  font-family: TragicMarker, Helvetica, Arial, sans-serif;
 }
 </style>
