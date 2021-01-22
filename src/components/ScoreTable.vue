@@ -1,6 +1,9 @@
 <template>
   <div>
-    <section-nav title="Player Standings" :showMore.sync="showMore" />
+    <section-nav 
+      :title="teams? 'Team Standings' : 'Player Standings'" 
+      :showMore.sync="showMore"
+    />
     
     <div style="overflow:hidden">
       <b-table responsive
@@ -9,25 +12,29 @@
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         striped 
-        bordered
       >
-      
+        <template v-slot:cell(name)="data">
+          <player-badge :name="data.value" />
+        </template>
       </b-table>
     </div>
   </div>
 </template>
 
 <script>
+import _template from '../_template.vue'
 import GameCard from './GameCard.vue'
+import PlayerBadge from './PlayerBadge.vue'
 import SectionNav from './SectionNav.vue'
 
 export default {
   components: { 
     GameCard,
     SectionNav,
+    PlayerBadge,
   },
-  name: 'ScoreTable',
-  props: ['games', 'players'],
+  name: 'GameList',
+  props: ['games', 'players', 'teams'],
   data() {
     return {
       showMore: false,
@@ -70,11 +77,22 @@ export default {
         };
       }
       for (const game of this.games) {
-        for (const player of game.get('team1')) {
-          playerDict[player] = this.assignPoints(playerDict[player], game.get('team1Score'), game.get('team2Score'));
-        }
-        for (const player of game.get('team2')) {
-          playerDict[player] = this.assignPoints(playerDict[player], game.get('team2Score'), game.get('team1Score'));
+        if (this.teams) {
+          if (game.get('team1').length > 1) {
+            var team1name = this.getTeamNameList(game.get('team1'));
+            playerDict[team1name] = this.assignPoints(playerDict[team1name], game.get('team1Score'), game.get('team2Score'));
+          }
+          if (game.get('team2').length > 1) {
+            var team2name = this.getTeamNameList(game.get('team2'));
+            playerDict[team2name] = this.assignPoints(playerDict[team2name], game.get('team2Score'), game.get('team1Score'));
+          }
+        } else {
+          for (const player of game.get('team1')) {
+            playerDict[player] = this.assignPoints(playerDict[player], game.get('team1Score'), game.get('team2Score'));
+          }
+          for (const player of game.get('team2')) {
+            playerDict[player] = this.assignPoints(playerDict[player], game.get('team2Score'), game.get('team1Score'));
+          }
         }
       }
       var playerList = [];
@@ -86,23 +104,6 @@ export default {
     },
   },
   methods: {
-    assignPoints(player, ownScore, otherScore) {
-      player['gamesPlayed'] += 1
-      player['goalsFor'] += Number(ownScore)
-      player['goalsAgainst'] += Number(otherScore)
-      player['goalDifference'] += Number(ownScore)
-      player['goalDifference'] -= Number(otherScore)
-      if (ownScore - otherScore > 0) { //team1 won
-        player['wins'] += 1
-        player['points'] += 3
-      } else if (ownScore - otherScore == 0) { //draw
-        player['draws'] += 1
-        player['points'] += 1
-      } else { //team2 won
-        player['losses'] += 1
-      }
-      return player;
-    }
   }
 }
 </script>

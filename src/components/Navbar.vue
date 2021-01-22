@@ -1,8 +1,8 @@
 <template>
   <b-navbar size="sm" sticky variant="dark" type="dark">
     <b-container>
-      <b-navbar-brand href="/">
-        <img src="../assets/logo.png" class="d-inline-block align-top logo" alt="rudiboard">
+      <b-navbar-brand href="/" class="my-n2">
+        <img src="../../public/rudicon.png" class="d-inline-block align-top logo" alt="rudiboard">
         <span v-if="brandname" class="ml-2">rudiboard</span>
       </b-navbar-brand>
       <slot></slot>
@@ -21,7 +21,7 @@ export default {
 
 <style scoped>
 .logo {
-  height: 30px;
-  width: 30px;
+  height: 35px;
+  width: 35px;
 }
 </style>

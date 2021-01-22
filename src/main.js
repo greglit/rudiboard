@@ -33,7 +33,24 @@ Vue.mixin({
     },
     getDateAsString(d) {
       return ("0"+d.getDate()).slice(-2)+"."+("0"+(d.getMonth()+1)).slice(-2)+"."+d.getFullYear()+" "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);
-    }
+    },
+    assignPoints(player, ownScore, otherScore) {
+      player['gamesPlayed'] += 1
+      player['goalsFor'] += Number(ownScore)
+      player['goalsAgainst'] += Number(otherScore)
+      player['goalDifference'] += Number(ownScore)
+      player['goalDifference'] -= Number(otherScore)
+      if (ownScore - otherScore > 0) { //team1 won
+        player['wins'] += 1
+        player['points'] += 3
+      } else if (ownScore - otherScore == 0) { //draw
+        player['draws'] += 1
+        player['points'] += 1
+      } else { //team2 won
+        player['losses'] += 1
+      }
+      return player;
+    },
   },
 })
 

@@ -1,14 +1,17 @@
 <template>
   <span>
-    <b-badge :key="key" v-for="(name, key) in team" class="mr-1" :href="'/player/'+name">
-        {{name}}
-    </b-badge>
+    <player-badge :key="key" v-for="(name, key) in team" :name="name" />
   </span>
 </template>
 
 <script>
+import PlayerBadge from './PlayerBadge.vue'
 export default {
   name: 'TeamList',
+  components: {
+    PlayerBadge,
+
+  },
   props: {
       team : Array,
   },

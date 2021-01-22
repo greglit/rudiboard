@@ -3,9 +3,22 @@
     <navbar brandname>
     </navbar>
     <b-container>
-      <b-row class="mt-5">
+      <b-row class="mt-4">
         <b-col>
+          <div style="opacity:0.3; position:absolute; z-index:-1000; width:202px; right:0px; left:0px; top:50px;" class="mx-auto">
+            <b-iconstack shift-v="0" class="mt-5 mb-0" scale="8.0">
+            <b-icon stacked icon="hexagon-fill" variant="primary" scale="1.8"></b-icon>
+            </b-iconstack>
+            <h1 class="marker" style="margin-top:-195px; margin-right: -20px; font-size:200pt; color:white">r</h1>
+          </div>
           <h1 class="text-center marker display-4">This is rudiboard, it's awesome! :D</h1>
+          <h5 style="max-width:500px" class="mx-auto">Track <b>games</b> and <b>scores</b> and plan <b>tournaments</b> at the office, in your shared flat or your favorite bar.</h5>
+          <!--<div style="opacity:0.5">
+            <b-iconstack shift-v="0" class="mt-5 mb-0" scale="8.0">
+            <b-icon stacked icon="hexagon-fill" variant="primary" scale="1.8"></b-icon>
+            </b-iconstack>
+            <h1 class="marker" style="margin-top:-195px; margin-right: -20px; font-size:200pt; color:white">r</h1>
+          </div>-->
         </b-col>
       </b-row>
       <b-row  class="mt-5">
@@ -30,7 +43,11 @@
             <b-button variant="success" size="lg" @click="createBoard()">Create!</b-button>
           </b-form>
         </b-col>
-      </b-row>
+      </b-row>  
+      <br> 
+      <br>
+      <br>
+      <br>
     </b-container>
   </div>
 </template>

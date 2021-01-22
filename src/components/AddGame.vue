@@ -23,7 +23,7 @@
         <b-form-input v-model="team1Score" placeholder="score team 1" class="rounded-0"></b-form-input>
         <span class="mx-auto">:</span>
         <b-form-input v-model="team2Score" placeholder="score team 2" class="rounded-0"></b-form-input><br>
-        <b-button @click="addGame()" class="">Add Game</b-button>
+        <b-button @click="addGame()" variant="primary">Add Game</b-button>
       </b-form>
     </b-card>
   </div>

@@ -35,6 +35,8 @@
 
         <score-table :games="games" :players="playerList"/>
 
+        <score-table :games="games" :players="teamList" teams="true"/>
+
       </div>
       
     </b-container>
@@ -101,6 +103,24 @@ export default {
         }
       }
       return playerList;
+    },
+    teamList() {
+      var teamList = [];
+      for (const game of this.games) {
+        if (game.get('team1').length > 1) {
+          var team1name = this.getTeamNameList(game.get('team1'));
+          if (teamList.indexOf(team1name) === -1) {
+            teamList.push(team1name);
+          }
+        }
+        if (game.get('team2').length > 1) {
+          var team2name = this.getTeamNameList(game.get('team2'));
+          if (teamList.indexOf(team2name) === -1) {
+            teamList.push(team2name);
+          }
+        }
+      }
+      return teamList;
     }
   },
   methods: {
