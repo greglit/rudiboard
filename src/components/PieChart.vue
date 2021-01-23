@@ -1,5 +1,6 @@
 <script>
   import { Pie } from 'vue-chartjs'
+  import ChartDataLabels from 'chartjs-plugin-datalabels';
 
   export default {
     extends: Pie,
@@ -11,14 +12,14 @@
           datasets: [{
               borderWidth: 1,
               borderColor: [
-              'rgba(0, 153, 0,1)',
-              'rgba(255, 153, 51, 1)',
-              'rgba(255, 0, 0, 1)',           
+              'rgba(0,180,81,1)',
+              'rgba(92,107,192, 1)',
+              'rgba(255,90,78,1)',           
               ],
               backgroundColor: [
-              'rgba(0, 153, 0, 0.2)',
-              'rgba(255, 153, 51, 0.2)',
-              'rgba(255, 0, 0, 0.2)',                
+              'rgba(0,180,81, 0.2)',
+              'rgba(92,107,192, 0.2)',
+              'rgba(255,90,78, 0.2)',                
               ],
               data: this.pieData
             }]

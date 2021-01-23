@@ -3,7 +3,11 @@
     <navbar>
       <b-navbar-nav class="abs-center-x">
         <b-nav-text>
-          <h1 class="text-center mb-0 board-title marker">{{$route.params.boardName}}</h1>
+          <h1 class="text-center mb-0 board-title marker">
+            <router-link :to="'/board/'+$route.params.boardName+'/'+$route.params.boardId">
+              {{$route.params.boardName}}
+            </router-link>
+          </h1>
         </b-nav-text>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto m-n1">
@@ -29,7 +33,17 @@
       </div>
       <div v-else>
 
-        <add-game :players="playerList" class="mb-4 mr-0"/>
+        <b-card class="mb-4">
+          <b-tabs pills fill content-class="mt-3">
+            <b-tab title="Add Game">
+              <add-game :players="playerList"/>
+            </b-tab>
+            <b-tab title="Plan Tournament" active>
+              <plan-tournament :players="playerList"/>
+            </b-tab>
+          </b-tabs>
+        </b-card>
+        
 
         <game-list :games="games" :newestGameId="newestGameId" class="mb-4"/>
 
@@ -50,6 +64,7 @@ import GameCard from '../components/GameCard'
 import Navbar from '../components/Navbar.vue';
 import GameList from '../components/GameList.vue';
 import ScoreTable from '../components/ScoreTable.vue';
+import PlanTournament from '../components/PlanTournament.vue';
 
 export default {
   name: 'Board',
@@ -59,6 +74,7 @@ export default {
     Navbar,
     GameList,
     ScoreTable,
+    PlanTournament,
   },
   data() {
     return {

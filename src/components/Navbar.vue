@@ -1,7 +1,7 @@
 <template>
   <b-navbar size="sm" sticky variant="dark" type="dark">
     <b-container>
-      <b-navbar-brand href="/" class="my-n2">
+      <b-navbar-brand to="/" class="my-n2">
         <img src="../../public/rudicon.png" class="d-inline-block align-top logo" alt="rudiboard">
         <span v-if="brandname" class="ml-2">rudiboard</span>
       </b-navbar-brand>

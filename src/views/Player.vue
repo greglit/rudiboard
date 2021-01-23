@@ -3,7 +3,11 @@
     <navbar>
       <b-navbar-nav class="abs-center-x">
         <b-nav-text>
-          <h1 class="text-center mb-0 board-title marker">{{$route.params.boardName}}</h1>
+          <h1 class="text-center mb-0 board-title marker">
+            <router-link :to="'/board/'+$route.params.boardName+'/'+$route.params.boardId">
+              {{$route.params.boardName}}
+            </router-link>
+          </h1>
         </b-nav-text>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto m-n1">
@@ -29,8 +33,8 @@
 
         <h1 class="display-5">{{playerName}}</h1>
         <hr>
-        <h1>Points: {{playerData.points}}</h1>
-        <h1>Goal Difference: {{playerData.goalDifference}}</h1>
+        <h2>Points: {{playerData.points}}</h2>
+        <h2>Goal Difference: {{playerData.goalDifference}}</h2>
         <hr>
         <pie-chart :pieData="[playerData.wins, playerData.draws, playerData.losses]"/>
 

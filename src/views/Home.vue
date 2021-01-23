@@ -7,7 +7,7 @@
         <b-col>
           <div style="opacity:0.3; position:absolute; z-index:-1000; width:202px; right:0px; left:0px; top:50px;" class="mx-auto">
             <b-iconstack shift-v="0" class="mt-5 mb-0" scale="8.0">
-            <b-icon stacked icon="hexagon-fill" variant="primary" scale="1.8"></b-icon>
+            <b-icon stacked icon="hexagon-fill" variant="rudi" scale="1.8"></b-icon>
             </b-iconstack>
             <h1 class="marker" style="margin-top:-195px; margin-right: -20px; font-size:200pt; color:white">r</h1>
           </div>
