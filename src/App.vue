@@ -7,7 +7,7 @@
 
 <style lang="scss">
 @import './assets/styles/custom.scss';
-@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../node_modules/bootstrap/scss/bootstrap/';
 @import '../node_modules/bootstrap-vue/src/index.scss';
 
 @font-face {
