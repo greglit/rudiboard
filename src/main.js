@@ -51,6 +51,9 @@ Vue.mixin({
       }
       return player;
     },
+    randNum(min, max) {
+      return Math.random() * (max - min) + min;
+    },
   },
 })
 

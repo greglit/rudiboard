@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-form v-if="!tournament">
+  <div class="mt-5">
+    <b-form v-if="tournament.active == undefined">
       <b-form-input v-model="tourName" placeholder="Enter tournament name" class="rounded-0"></b-form-input>
       <vue-tags-input
         v-model="tourPlayersCurrent"
@@ -27,6 +27,7 @@
       <b-button @click="startTournament()" variant="rudi">Start Tournament!</b-button>
     </b-form>
     <b-form v-else>
+      <h5>Tournament: {{tournament.tourName}}</h5>
       <b-form-input v-model="team1Score" placeholder="score team 1" class="rounded-0"></b-form-input>
       <span class="mx-auto">:</span>
       <b-form-input v-model="team2Score" placeholder="score team 2" class="rounded-0"></b-form-input>
@@ -46,7 +47,7 @@ export default {
   data() {
     return {
       boardId: this.$route.params.boardId,
-      tournament: false,
+      tournament: {},
 
       tourName: '',
       tourPlayers: [],
@@ -88,19 +89,31 @@ export default {
       var players = this.tourPlayers.map(i => {
         return i.text;
       });
-      
+      var tourTeams = [];
+      while (players.length > 1) {
+        var team = [];
+        team.push(players.splice(this.randNum(0, players.length-1), 1)[0])
+        team.push(players.splice(this.randNum(0, players.length-1), 1)[0])
+        tourTeams.push(team);
+      }
+
       let tourData = {
         boardId : this.boardId,
-        team1 : team1Names,
-        team2 : team2Names,
-        team1Score : this.team1Score,
-        team2Score : this.team2Score,
+        tourName : this.tourName,
+        teams : tourTeams,
+        active : true,
       }
       new this.$Parse.Object("Tournament", tourData).save().then((game) => {
-        console.log(`Game succesfully added.`)
+        console.log(`Tournament succesfully added.`)
       }, (error) => {
-        alert('Failed to add game, with error code: ' + error.message);
+        alert('Failed to add tournament, with error code: ' + error.message);
       });
+    },
+    async fetchData() {
+      var query = new this.$Parse.Query('Tournament');
+      query.equalTo("boardId", this.boardId).equalTo("active", true)
+      var tournamentQueryResult = await query.find();
+      this.tournament = tournamentQueryResult;
     },
     addGame() {
       var team1Names = this.team1.map(i => {
@@ -122,6 +135,23 @@ export default {
         alert('Failed to add game, with error code: ' + error.message);
       });
     }
+  },
+  async mounted() {
+    var query = new this.$Parse.Query('Tournament');
+    query.equalTo("boardId", this.boardId);
+    let subscription = await query.subscribe();
+    subscription.on('create', game => {
+      console.log('create')
+      this.fetchData()
+    });
+    subscription.on('delete', game => {
+      console.log('delete')
+      this.fetchData()
+    });
+    subscription.on('update', game => {
+      console.log('update')
+      this.fetchData()
+    });
   },
 }
 </script>

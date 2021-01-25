@@ -17,12 +17,11 @@
           </b-button>
         </b-nav-item>
       </b-navbar-nav>
-      
-      
     </navbar>
     <b-modal hide-footer size="lg" id="shareModal" title="Share this board with others">
       ID:{{$route.params.boardId}}
     </b-modal>
+
     <b-container class="mt-4 px-md-0">
       <div v-if="loading">
         <b-card>
@@ -34,7 +33,8 @@
       <div v-else>
 
         <b-card class="mb-4">
-          <b-tabs pills fill content-class="mt-3">
+          <b-tabs pills fill content-class="">
+            <hr>
             <b-tab title="Add Game">
               <add-game :players="playerList"/>
             </b-tab>
@@ -44,11 +44,13 @@
           </b-tabs>
         </b-card>
         
-
+        <br>
         <game-list :games="games" :newestGameId="newestGameId" class="mb-4"/>
-
+        <br>
+        <br>
         <score-table :games="games" :players="playerList"/>
-
+        <br>
+        <br>
         <score-table :games="games" :players="teamList" teams="true"/>
 
       </div>
