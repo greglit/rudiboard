@@ -13,23 +13,13 @@
       </b-row>
       <b-row class="pb-3">
         <b-col class="px-1">
-          <vue-tags-input
-            v-model="team1current"
-            :tags="team1"
-            :autocomplete-items="filteredItems"
-            @tags-changed="newTags => team1 = newTags"
-            placeholder="Add members"
-            class="w-100 mw-100"
+          <vue-tags-input v-model="team1current" :tags="team1" :autocomplete-items="filteredItems"
+            @tags-changed="newTags => team1 = newTags" placeholder="Add members" class="w-100 mw-100"
           />
         </b-col>
         <b-col class="px-1">
-          <vue-tags-input
-            v-model="team2current"
-            :tags="team2"
-            :autocomplete-items="filteredItems"
-            @tags-changed="newTags => team2 = newTags"
-            placeholder="Add members"
-            class="w-100 mw-100"
+          <vue-tags-input v-model="team2current" :tags="team2" :autocomplete-items="filteredItems"
+            @tags-changed="newTags => team2 = newTags" placeholder="Add members" class="w-100 mw-100"
           />
         </b-col>
       </b-row>

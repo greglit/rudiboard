@@ -39,7 +39,7 @@
               <add-game :players="playerList"/>
             </b-tab>
             <b-tab title="Plan Tournament" active>
-              <plan-tournament :players="playerList"/>
+              <plan-tournament :players="playerList" :games="games"/>
             </b-tab>
           </b-tabs>
         </b-card>

@@ -19,7 +19,7 @@
         </b-button>
       </b-nav-item>
     </b-navbar-nav>
-    </b-navbar>
+  </b-navbar>
 </template>
 
 <script>
