@@ -120,41 +120,56 @@ export default {
     openGames() {
       if (this.tournament != undefined) {
         var openGames = [];
-        const teams = this.tournament.get('teams');
-
-        for (var i = 0; i < teams.length - 1; i += 2) {
-          var team1Players = teams[i];
-          var team2Players = teams[i + 1];
-          var foundGame = false;
-          console.log(this.tourGames);
-          for (const game of this.tourGames) {
-            const team1str = this.getTeamNameList(team1Players);
-            const team2str = this.getTeamNameList(team2Players);
-            const gameTeam1str = this.getTeamNameList(game.get('team1'));
-            const gameTeam2str = this.getTeamNameList(game.get('team2'));
-            if (team1str == gameTeam1str && team2str == gameTeam2str) {
-              foundGame = true;
+        var teams = this.tournament.get('teams');
+        var teamsNextRound = [];
+        while (openGames.length == 0 && teams.length > 1) {
+          for (var i = 0; i < teams.length - 1; i += 2) {
+            var team1Players = teams[i];
+            var team2Players = teams[i + 1];
+            if (team2Players == undefined) {
+              teamsNextRound.push(team1Players);
               break;
             }
-          }
-          if (!foundGame) {
-            var newGame = {
-              boardId : this.boardId,
-              team1 : team1Players,
-              team2 : team2Players,
-              team1Score : undefined,
-              team2Score : undefined,
-              tournamentId : this.tournament.id,
-              description : this.tournament.get('tourName') + ' 1. Round',
+            var foundGame = false;
+            for (const game of this.tourGames) {
+              const team1str = this.getTeamNameList(team1Players);
+              const team2str = this.getTeamNameList(team2Players);
+              const gameTeam1str = this.getTeamNameList(game.get('team1'));
+              const gameTeam2str = this.getTeamNameList(game.get('team2'));
+              if (team1str == gameTeam1str && team2str == gameTeam2str) {
+                if (game.get('team1Score') > game.get('team2Score')){
+                  teamsNextRound.push(game.get('team1'));
+                } else {
+                  teamsNextRound.push(game.get('team2'));
+                }
+                foundGame = true;
+                break;
+              }
             }
-            openGames.push(newGame);
+            if (!foundGame) {
+              var newGame = {
+                boardId : this.boardId,
+                team1 : team1Players,
+                team2 : team2Players,
+                team1Score : undefined,
+                team2Score : undefined,
+                tournamentId : this.tournament.id,
+                description : this.tournament.get('tourName'),
+              }
+              openGames.push(newGame);
+            }
           }
+          teams = teamsNextRound;
+          teamsNextRound = [];
         }
-
-        if (openGames.length == 0) {
-          for (var i = 0; i < tourGames.length - 1; i += 2) {
-            
-          }
+        if (teams.length == 1) {
+          alert(`Team ${teams[0]} has won the tournament "${this.tournament.get('tourName')}"!`);
+          this.tournament.set('active', false);
+          this.tournament.save().then(() => {
+            console.log(`Tounament succesfully canceled.`)
+          }, (error) => {
+            alert('Failed to cancel tournament, with error code: ' + error.message);
+          });
         }
         console.log(openGames);
         return openGames;

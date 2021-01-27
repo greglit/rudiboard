@@ -32,7 +32,7 @@ Vue.mixin({
       return teamNameList;
     },
     getDateAsString(d) {
-      return ("0"+d.getDate()).slice(-2)+"."+("0"+(d.getMonth()+1)).slice(-2)+"."+d.getFullYear()+" "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);
+      return ("0"+d.getDate()).slice(-2)+"."+("0"+(d.getMonth()+1)).slice(-2)+"."+String(d.getFullYear()).slice(-2)+" "+("0"+d.getHours()).slice(-2)+":"+("0"+d.getMinutes()).slice(-2);
     },
     assignPoints(player, ownScore, otherScore) {
       player['gamesPlayed'] += 1

@@ -1,8 +1,9 @@
 <template>
   <div>
     <b-alert variant="primary" show fade class="p-1">
-      <span class="float-left date">{{getDateAsString(game.get('createdAt'))}}</span>
-      <span class="float-right delete" @click="deleteGame()">
+      <span class="float-left date gray">{{getDateAsString(game.get('createdAt'))}}</span>
+      <span v-if="game.get('tournamentId') != undefined" class="gray tournament">tournament game</span>
+      <span class="float-right delete gray" @click="deleteGame()">
         <b-icon-trash-fill/>
       </span>
       <b-container class="mt-4 pb-0 px-0">
@@ -62,7 +63,6 @@ export default {
 
 <style scoped>
 .delete {
-  color: rgb(94, 94, 94);
   position: absolute;
   top: 4px;
   right: 8px;
@@ -73,9 +73,16 @@ export default {
 }
 .date {
   font-size: 10pt;
-  color: gray;
   position: absolute;
   top: 4px;
   left: 8px;
+}
+.gray {
+  color: gray;
+}
+.tournament{
+  top: 4px;
+  font-size: 10pt;
+  position: absolute;
 }
 </style>
