@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <router-view/>
   </div>
 </template>
@@ -10,10 +9,6 @@
 @import '../node_modules/bootstrap/scss/bootstrap';
 @import '../node_modules/bootstrap-vue/src/index.scss';
 
-@font-face {
-  font-family: "RoastChicken";
-  src: local("RoastChicken"),   url(./assets/fonts/RoastChicken.ttf) format("truetype");
-}
 @font-face {
   font-family: "TragicMarker";
   src: local("TragicMarker"),   url(./assets/fonts/TragicMarker.otf) format("opentype");

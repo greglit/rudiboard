@@ -4,9 +4,7 @@ import router from './router'
 import store from './store'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-//following imports moved to App.vue style section
-//import 'bootstrap/dist/css/bootstrap.css'
-//import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
@@ -20,7 +18,6 @@ Vue.prototype.$Parse = Parse
 
 Vue.config.productionTip = false
 
-// Mixins
 Vue.mixin({
   methods: {
     getTeamNameList(team) {
