@@ -2,11 +2,13 @@
   <div>
     <b-alert variant="primary" show fade class="p-1">
       <span class="float-left date gray">{{getDateAsString(game.get('createdAt'))}}</span>
-      <span v-if="game.get('tournamentId') != undefined" class="gray tournament">tournament game</span>
       <span class="float-right delete gray" @click="deleteGame()">
         <b-icon-trash-fill/>
       </span>
       <b-container class="mt-4 pb-0 px-0">
+      <b-row v-if="game.get('description') != undefined">
+        <b-col><span class="tournament">{{game.get('description')}}</span></b-col>
+      </b-row>
       <b-row class="m-1">
         <b-col class="px-1">
           <team-list :team="game.get('team1')" class="float-right"/>
@@ -81,8 +83,6 @@ export default {
   color: gray;
 }
 .tournament{
-  top: 4px;
   font-size: 10pt;
-  position: absolute;
 }
 </style>

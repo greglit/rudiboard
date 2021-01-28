@@ -10,13 +10,20 @@
         placeholder="Add players to the tournament"
         class="w-100 mw-100 py-3"
       />
-      <b-form-group label="">
+      <b-form-group label="Select team size:" label-size="sm" label-cols="6">
+        <b-form-input
+          type="number"
+          v-model="teamSizeSelected"
+          class="rounded-0"
+        />
+      </b-form-group>
+      <b-form-group>
         <b-form-radio-group
             v-model="teamAlgoSelected" :options="teamAlgoOptions"
             button-variant="outline-primary" buttons size="sm" class="w-100"
         ></b-form-radio-group>
       </b-form-group>
-      <b-form-group label="">
+      <b-form-group>
         <b-form-radio-group
             v-model="tourModeSelected" :options="tourModeOptions"
             button-variant="outline-primary" buttons size="sm" class="w-100 pb-3"
@@ -30,7 +37,7 @@
       <b-navbar class="p-0">
         <b-navbar-nav>
           <b-nav-text>
-            <h5>Running Tournament</h5>
+            <h5>Running Tournament {{strTourNameIfSet(tournament.get('tourName'))}}</h5>
           </b-nav-text>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
@@ -85,6 +92,7 @@ export default {
 
       tourName: '',
       tourPlayers: [],
+      teamSizeSelected: 2,
       tourPlayersCurrent: '',
 
       teamAlgoSelected: 'random',
@@ -122,20 +130,23 @@ export default {
         var openGames = [];
         var teams = this.tournament.get('teams');
         var teamsNextRound = [];
+        console.log('teams: '+teams);
+        console.log('teamsNextRound: '+teamsNextRound);
         while (openGames.length == 0 && teams.length > 1) {
+          console.log('teams: '+teams);
+          console.log('teamsNextRound: '+teamsNextRound);
           for (var i = 0; i < teams.length - 1; i += 2) {
             var team1Players = teams[i];
             var team2Players = teams[i + 1];
-            if (team2Players == undefined) {
-              teamsNextRound.push(team1Players);
-              break;
-            }
+            console.log('team1: '+team1Players);
+            console.log('team2: '+team2Players);
             var foundGame = false;
             for (const game of this.tourGames) {
               const team1str = this.getTeamNameList(team1Players);
               const team2str = this.getTeamNameList(team2Players);
               const gameTeam1str = this.getTeamNameList(game.get('team1'));
               const gameTeam2str = this.getTeamNameList(game.get('team2'));
+              console.log(team1str+"=="+gameTeam1str+" && "+team2str+"=="+gameTeam2str);
               if (team1str == gameTeam1str && team2str == gameTeam2str) {
                 if (game.get('team1Score') > game.get('team2Score')){
                   teamsNextRound.push(game.get('team1'));
@@ -145,6 +156,7 @@ export default {
                 foundGame = true;
                 break;
               }
+              console.log('teamsNextRound: '+teamsNextRound);
             }
             if (!foundGame) {
               var newGame = {
@@ -154,16 +166,23 @@ export default {
                 team1Score : undefined,
                 team2Score : undefined,
                 tournamentId : this.tournament.id,
-                description : this.tournament.get('tourName'),
+                description : `Tournament${this.strTourNameIfSet(this.tournament.get('tourName'))}`,
               }
               openGames.push(newGame);
             }
+            console.log('openGames: '+openGames);
+          }
+          if (teams.length % 2 == 1) {
+            console.log('!!!lonely team!!!')
+            teamsNextRound.unshift(teams[teams.length-1]);
           }
           teams = teamsNextRound;
           teamsNextRound = [];
+          console.log('teams: '+teams);
+          console.log('teamsNextRound: '+teamsNextRound);
         }
-        if (teams.length == 1) {
-          alert(`Team ${teams[0]} has won the tournament "${this.tournament.get('tourName')}"!`);
+        if (teams.length == 1 && openGames.length == 0) {
+          alert(`Team ${teams[0]} has won the tournament${this.strTourNameIfSet(this.tournament.get('tourName'))}!`);
           this.tournament.set('active', false);
           this.tournament.save().then(() => {
             console.log(`Tounament succesfully canceled.`)
@@ -171,13 +190,13 @@ export default {
             alert('Failed to cancel tournament, with error code: ' + error.message);
           });
         }
-        console.log(openGames);
+        console.log('openGames: '+openGames);
         return openGames;
       }
     },
     tourGames() {
-      console.log(this.tournament.id);
-      console.log(this.games[0].get('tournamentId'));
+      //console.log(this.tournament.id);
+      //console.log(this.games[0].get('tournamentId'));
       return this.games.filter(game => game.get('tournamentId') === this.tournament.id);
     }
   },
@@ -189,8 +208,9 @@ export default {
       var tourTeams = [];
       while (players.length > 1) {
         var team = [];
-        team.push(players.splice(this.randNum(0, players.length-1), 1)[0])
-        team.push(players.splice(this.randNum(0, players.length-1), 1)[0])
+        for (var i = 0; i < this.teamSizeSelected; i++) {
+          team.push(players.splice(this.randNum(0, players.length-1), 1)[0])
+        }
         tourTeams.push(team);
       }
 
@@ -228,6 +248,9 @@ export default {
       }, (error) => {
         alert('Failed to add game, with error code: ' + error.message);
       });
+    },
+    strTourNameIfSet(tourName){
+      return tourName != '' ? ' "'+this.tournament.get('tourName')+'"' : ''
     }
   },
   created () {
