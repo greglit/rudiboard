@@ -35,10 +35,10 @@
         <b-card class="mb-4">
           <b-tabs pills fill content-class="">
             <hr>
-            <b-tab title="Add Game">
+            <b-tab title="Add Game" active>
               <add-game :players="playerList"/>
             </b-tab>
-            <b-tab title="Plan Tournament" active>
+            <b-tab title="Plan Tournament" disabled>
               <plan-tournament :players="playerList" :games="games"/>
             </b-tab>
           </b-tabs>
