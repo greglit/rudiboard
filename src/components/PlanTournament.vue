@@ -23,12 +23,13 @@
             button-variant="outline-primary" buttons size="sm" class="w-100"
         ></b-form-radio-group>
       </b-form-group>
+      <!--
       <b-form-group>
         <b-form-radio-group
             v-model="tourModeSelected" :options="tourModeOptions"
             button-variant="outline-primary" buttons size="sm" class="w-100 pb-3"
         ></b-form-radio-group>
-      </b-form-group>
+      </b-form-group>-->
 
       <b-button @click="startTournament()" variant="rudi">Start Tournament!</b-button>
     </b-form>
@@ -90,27 +91,31 @@ export default {
       boardId: this.$route.params.boardId,
       tournament: undefined,
 
-      tourName: '',
-      tourPlayers: [],
-      teamSizeSelected: 2,
-      tourPlayersCurrent: '',
+      tourName: String,
+      tourPlayers: Array,
+      teamSizeSelected: Number,
+      tourPlayersCurrent: String,
 
-      teamAlgoSelected: 'random',
+      teamAlgoSelected: String,
       teamAlgoOptions: [
         { text: 'random teams', value: 'random' },
         { text: 'balanced teams', value: 'balanced', disabled: true },
       ],
 
-      tourModeSelected: 'elimination',
+      /*tourModeSelected: String,
       tourModeOptions: [
         { text: 'elimination tournament', value: 'elimination' },
         { text: 'table tournament', value: 'table', disabled: true },
-      ],
+      ],*/
 
-
-
-      team1Score: '',
-      team2Score: '',
+      formDefaults: {
+        tourName: '',
+        tourPlayers: [],
+        teamSizeSelected: 2,
+        tourPlayersCurrent: '',
+        teamAlgoSelected: 'random',
+        tourModeSelected: 'elimination',
+      },
     }
   },
   computed: {
@@ -126,87 +131,87 @@ export default {
       });
     },
     openGames() {
-      if (this.tournament != undefined) {
-        var openGames = [];
-        var teams = this.tournament.get('teams');
-        var teamsNextRound = [];
-        console.log('teams: '+teams);
-        console.log('teamsNextRound: '+teamsNextRound);
-        while (openGames.length == 0 && teams.length > 1) {
-          console.log('teams: '+teams);
-          console.log('teamsNextRound: '+teamsNextRound);
-          for (var i = 0; i < teams.length - 1; i += 2) {
-            var team1Players = teams[i];
-            var team2Players = teams[i + 1];
-            console.log('team1: '+team1Players);
-            console.log('team2: '+team2Players);
-            var foundGame = false;
-            for (const game of this.tourGames) {
-              const team1str = this.getTeamNameList(team1Players);
-              const team2str = this.getTeamNameList(team2Players);
-              const gameTeam1str = this.getTeamNameList(game.get('team1'));
-              const gameTeam2str = this.getTeamNameList(game.get('team2'));
-              console.log(team1str+"=="+gameTeam1str+" && "+team2str+"=="+gameTeam2str);
-              if (team1str == gameTeam1str && team2str == gameTeam2str) {
-                if (game.get('team1Score') > game.get('team2Score')){
-                  teamsNextRound.push(game.get('team1'));
-                } else {
-                  teamsNextRound.push(game.get('team2'));
-                }
-                foundGame = true;
-                break;
+      var openGames = [];
+      var teamsThisRound = this.tournament.get('teams');
+      var teamsNextRound = [];
+      while (openGames.length == 0 && teamsThisRound.length > 1) { //search for open games until a new open game is found or the tournament is finished
+        //console.log('teamsThisRound: '+teamsThisRound);
+        //console.log('teamsNextRound: '+teamsNextRound);
+        for (var i = 0; i < teamsThisRound.length - 1; i += 2) { //iterate over all teams in pairs of two in this tournament round 
+          var team1Players = teamsThisRound[i];
+          var team2Players = teamsThisRound[i + 1];
+          //console.log('team1: '+team1Players);
+          //console.log('team2: '+team2Players);
+          var foundGame = false;
+          for (const game of this.tourGames) { //search for already exiting tournament gaes with those players
+            const team1str = this.getTeamNameList(team1Players);
+            const team2str = this.getTeamNameList(team2Players);
+            const gameTeam1str = this.getTeamNameList(game.get('team1'));
+            const gameTeam2str = this.getTeamNameList(game.get('team2'));
+            if (team1str == gameTeam1str && team2str == gameTeam2str) { //if found they have already played
+              if (game.get('team1Score') > game.get('team2Score')){ //determine which team will go into next tournament round
+                teamsNextRound.push(game.get('team1'));
+              } else {
+                teamsNextRound.push(game.get('team2'));
               }
-              console.log('teamsNextRound: '+teamsNextRound);
+              foundGame = true;
+              break;
             }
-            if (!foundGame) {
-              var newGame = {
-                boardId : this.boardId,
-                team1 : team1Players,
-                team2 : team2Players,
-                team1Score : undefined,
-                team2Score : undefined,
-                tournamentId : this.tournament.id,
-                description : `Tournament${this.strTourNameIfSet(this.tournament.get('tourName'))}`,
-              }
-              openGames.push(newGame);
+            //console.log('teamsNextRound: '+teamsNextRound);
+          }
+          if (!foundGame) { //if the two teams didn't play already, a new game object is created added to the open games
+            var newGame = {
+              boardId : this.boardId,
+              team1 : team1Players,
+              team2 : team2Players,
+              team1Score : undefined,
+              team2Score : undefined,
+              tournamentId : this.tournament.id,
+              description : `Tournament${this.strTourNameIfSet(this.tournament.get('tourName'))}`,
             }
-            console.log('openGames: '+openGames);
+            openGames.push(newGame);
           }
-          if (teams.length % 2 == 1) {
-            console.log('!!!lonely team!!!')
-            teamsNextRound.unshift(teams[teams.length-1]);
-          }
-          teams = teamsNextRound;
-          teamsNextRound = [];
-          console.log('teams: '+teams);
-          console.log('teamsNextRound: '+teamsNextRound);
         }
-        if (teams.length == 1 && openGames.length == 0) {
-          alert(`Team ${teams[0]} has won the tournament${this.strTourNameIfSet(this.tournament.get('tourName'))}!`);
-          this.tournament.set('active', false);
-          this.tournament.save().then(() => {
-            console.log(`Tounament succesfully canceled.`)
-          }, (error) => {
-            alert('Failed to cancel tournament, with error code: ' + error.message);
-          });
+        if (teamsThisRound.length % 2 == 1) { //in case of an odd team number the leftover team is directly added to the next round
+          //console.log('lonely team!')
+          teamsNextRound.unshift(teamsThisRound[teamsThisRound.length-1]);
         }
-        console.log('openGames: '+openGames);
-        return openGames;
+        teamsThisRound = teamsNextRound;
+        teamsNextRound = [];
+        //console.log('teamsThisRound: '+teamsThisRound);
+        //console.log('teamsNextRound: '+teamsNextRound);
       }
+      if (teamsThisRound.length == 1 && openGames.length == 0) { //if only one team remains and there are no open games, then this team has won!
+        alert(`Team ${teamsThisRound[0]} has won the tournament${this.strTourNameIfSet(this.tournament.get('tourName'))}!`);
+        this.tournament.set('active', false);
+        this.tournament.save().then(() => {
+          console.log(`Tounament succesfully canceled.`)
+        }, (error) => {
+          alert('Failed to cancel tournament, with error code: ' + error.message);
+        });
+      }
+      //console.log('openGames: '+openGames);
+      return openGames;
     },
     tourGames() {
-      //console.log(this.tournament.id);
-      //console.log(this.games[0].get('tournamentId'));
       return this.games.filter(game => game.get('tournamentId') === this.tournament.id);
     }
   },
   methods: {
+    setFormDefaults(){
+      this.tourName = this.formDefaults.tourName;
+      this.tourPlayers = this.formDefaults.tourPlayers;
+      this.teamSizeSelected = this.formDefaults.teamSizeSelected;
+      this.tourPlayersCurrent = this.formDefaults.tourPlayersCurrent;
+      this.teamAlgoSelected = this.formDefaults.teamAlgoSelected;
+      //this.tourModeSelected = this.formDefaults.tourModeSelected;
+    },
     startTournament() {
       var players = this.tourPlayers.map(i => {
         return i.text;
       });
       var tourTeams = [];
-      while (players.length > 1) {
+      while (players.length > this.teamSizeSelected-1) {
         var team = [];
         for (var i = 0; i < this.teamSizeSelected; i++) {
           team.push(players.splice(this.randNum(0, players.length-1), 1)[0])
@@ -254,7 +259,8 @@ export default {
     }
   },
   created () {
-    this.fetchData()
+    this.setFormDefaults();
+    this.fetchData();
   },
   async mounted() {
     var query = new this.$Parse.Query('Tournament');
