@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form @submit="onSubmit">
-      <b-container class="mt-5 pb-3 px-0">
+      <b-container class="mt-5 pb-2 px-0">
       <b-row class="">
         <b-col class="">
           Team 1
@@ -25,15 +25,20 @@
       </b-row>
       <b-row>
         <b-col class="px-1">
-          <b-form-input v-model="team1Score" type="number" placeholder="Score team 1" class="rounded-0"></b-form-input>
+          <b-form-input v-model="team1Score" type="number" placeholder="Score team 1" class="rounded-0" required></b-form-input>
         </b-col>
         <b-col cols="1" class="p-0">:</b-col>
         <b-col class="px-1">
-          <b-form-input v-model="team2Score" type="number" placeholder="Score team 2" class="rounded-0"></b-form-input>
+          <b-form-input v-model="team2Score" type="number" placeholder="Score team 2" class="rounded-0" required></b-form-input>
         </b-col>
       </b-row>
       </b-container>
-      <b-button type="submit" variant="rudi">Add Game</b-button>
+      <b-form-invalid-feedback :state="false">
+        {{validationText}}<br>
+      </b-form-invalid-feedback>
+      <b-button type="submit" variant="rudi" :disabled="validationText != '' || waitForGameAdded">
+        <b-icon v-if="waitForGameAdded" icon="arrow-clockwise" animation="spin" font-scale="1"/>Add Game
+      </b-button>
     </b-form>
   </div>
 </template>
@@ -56,6 +61,12 @@ export default {
       team2current: '',
       team1Score: '',
       team2Score: '',
+
+      validationText: '',
+      team1gotInput: false,
+      team2gotInput: false,
+
+      waitForGameAdded: false,
     }
   },
   computed: {
@@ -70,32 +81,73 @@ export default {
         return { text: i};
       });
     },
+    team1Array() {
+      return this.team1.map(i => {
+        return i.text;
+      });
+    },
+    team2Array() {
+      return this.team2.map(i => {
+        return i.text;
+      });
+    },
+    formInputsWrapper() {
+      return `${this.team1}|${this.team2}`;
+    }
+  },
+  watch: {
+    formInputsWrapper(newVal, oldVal) {
+      const [oldTeam1, oldTeam2] = oldVal.split('|');
+      const [newTeam1, newTeam2] = newVal.split('|');
+      if (!this.team1gotInput) {
+        this.team1gotInput = newTeam1 != '';
+      }
+      if (!this.team2gotInput) {
+        this.team2gotInput = newTeam2 != '';
+      }
+      this.validateForm()
+    }
   },
   methods: {
     onSubmit(e) {
       e.preventDefault();
-      this.addGame()
+      if (this.validationText == '') {
+        this.addGame();
+      }
     },
     addGame() {
-      var team1Names = this.team1.map(i => {
-        return i.text;
-      });
-      var team2Names = this.team2.map(i => {
-        return i.text;
-      });
+      this.waitForGameAdded = true;
       let gameData = {
         boardId : this.boardId,
-        team1 : team1Names,
-        team2 : team2Names,
+        team1 : this.team1Array,
+        team2 : this.team2Array,
         team1Score : this.team1Score,
         team2Score : this.team2Score,
       }
       new this.$Parse.Object("Game", gameData).save().then((game) => {
+        this.waitForGameAdded = false;
         console.log(`Game succesfully added.`)
       }, (error) => {
+        this.waitForGameAdded = false;
         alert('Failed to add game, with error code: ' + error.message);
       });
-    }
+    },
+    validateForm() {
+      var errorText = '';
+      if (this.team1.length == 0 && this.team1gotInput) {
+        errorText += 'Team 1 must contain at least one member. '
+      }
+      if (this.team2.length == 0 && this.team2gotInput) {
+        errorText += 'Team 2 must contain at least one member. '
+      }
+      if (this.arraysHaveCommonElement(this.team1Array, this.team2Array)) {
+        errorText += `A player can't be in two teams at once. `
+      }
+      this.validationText = errorText;
+    },
+    arraysHaveCommonElement(arr1, arr2) {
+      return arr1.some(item => arr2.includes(item));
+    },
   },
 }
 </script>

@@ -1,16 +1,22 @@
 <template>
   <div class="mt-4">
     <b-form v-if="tournament == undefined" @submit="onSubmit">
-      <b-form-input v-model="tourName" placeholder="Enter tournament name" class="rounded-0"></b-form-input>
+      <b-form-input v-model="tourName" placeholder="Enter tournament name (optional)" class="rounded-0"></b-form-input>
       <vue-tags-input
         v-model="tourPlayersCurrent"
         :tags="tourPlayers"
         :autocomplete-items="filteredItems"
         @tags-changed="newTags => tourPlayers = newTags"
         placeholder="Add players to the tournament"
-        class="w-100 mw-100 py-3"
+        class="w-100 mw-100 mt-3"
       />
-      <b-form-group label="Select team size:" label-size="sm" label-cols="6">
+      <b-form-text>
+        {{validationText}}
+      </b-form-text>
+      <b-form-text>
+        {{warningText}}
+      </b-form-text>
+      <b-form-group label="Select team size:" label-size="sm" label-cols="6" class="mt-3">
         <b-form-input
           type="number"
           v-model="teamSizeSelected"
@@ -30,8 +36,9 @@
             button-variant="outline-primary" buttons size="sm" class="w-100 pb-3"
         ></b-form-radio-group>
       </b-form-group>-->
-
-      <b-button type="submit" variant="rudi">Start Tournament!</b-button>
+      <b-button type="submit" variant="rudi" :disabled="validationText != '' || waitForTournamentStarted">
+        <b-icon v-if="waitForTournamentStarted" icon="arrow-clockwise" animation="spin" font-scale="1"/>Start Tournament!
+      </b-button>
     </b-form>
 
     <div v-else>
@@ -49,27 +56,7 @@
       </b-navbar>
       <span class="float-left">Next Games:</span>
       <b-container class="px-0 mt-5">
-        <b-form :key="index" v-for="(game, index) in openGames" class="mt-4">
-          <b-row>
-            <b-col>
-              <player-badge :name="getTeamNameList(game.team1)" class="float-right pb-2"/>
-            </b-col>
-            <b-col cols="1" class="p-0">vs.</b-col>
-            <b-col class="">
-              <player-badge :name="getTeamNameList(game.team2)"  class="float-left pb-2"/>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col class="px-1">
-              <b-form-input type="number" v-model="game.team1Score" placeholder="Score team 1" class="rounded-0"></b-form-input>
-            </b-col>
-            <b-col cols="1" class="p-0">:</b-col>
-            <b-col class="px-1">
-              <b-form-input type="number" v-model="game.team2Score" placeholder="Score team 2" class="rounded-0"></b-form-input>
-            </b-col>
-          </b-row>
-          <b-button @click="addGame(game)" variant="rudi" class="mt-2">Enter Game</b-button>
-        </b-form>
+        <tour-add-game :key="index+game.team1+game.team2" v-for="(game, index) in openGames" class="mt-4" :gameData="game"/>
       </b-container>
     </div>
   </div>
@@ -78,12 +65,14 @@
 <script>
 import VueTagsInput from '@johmun/vue-tags-input';
 import PlayerBadge from './PlayerBadge.vue';
+import TourAddGame from './TourAddGame.vue';
 
 export default {
   name: 'PlanTournament',
   components: {
     VueTagsInput,
     PlayerBadge,
+    TourAddGame,
   },
   props: ['players', 'games'],
   data() {
@@ -116,6 +105,10 @@ export default {
         teamAlgoSelected: 'random',
         tourModeSelected: 'elimination',
       },
+
+      validationText: '',
+      warningText: '',
+      waitForTournamentStarted: false,
     }
   },
   computed: {
@@ -144,11 +137,7 @@ export default {
           //console.log('team2: '+team2Players);
           var foundGame = false;
           for (const game of this.tourGames) { //search for already exiting tournament gaes with those players
-            const team1str = this.getTeamNameList(team1Players);
-            const team2str = this.getTeamNameList(team2Players);
-            const gameTeam1str = this.getTeamNameList(game.get('team1'));
-            const gameTeam2str = this.getTeamNameList(game.get('team2'));
-            if (team1str == gameTeam1str && team2str == gameTeam2str) { //if found they have already played
+            if (this.arraysEqual(team1Players, game.get('team1')) && this.arraysEqual(team2Players, game.get('team2'))) { //if found they have already played
               if (game.get('team1Score') > game.get('team2Score')){ //determine which team will go into next tournament round
                 teamsNextRound.push(game.get('team1'));
               } else {
@@ -195,9 +184,35 @@ export default {
     },
     tourGames() {
       return this.games.filter(game => game.get('tournamentId') === this.tournament.id);
-    }
+    },
+    tourPlayersList() {
+      return this.tourPlayers.map(i => {
+        return i.text;
+      });
+    } ,
+    formInputsValidationWrapper() {
+      return `${this.tourPlayers}|${this.teamSizeSelected}`;
+    },
+  },
+  watch: {
+    formInputsValidationWrapper(newVal, oldVal) {
+      const [oldTourPlayers, oldteamSizeSelected] = oldVal.split('|');
+      const [newtourPlayers, newteamSizeSelected] = newVal.split('|');
+      this.validateForm()
+    },
   },
   methods: {
+    validateForm() {
+      var errorText = '';
+      var warningText = '';
+      if (this.tourPlayersList.length < this.teamSizeSelected*2) {
+        errorText += `Please add at least ${this.teamSizeSelected*2-this.tourPlayersList.length} more player(s) for a tournament with ${this.teamSizeSelected} player(s) per team.`
+      } else if (this.tourPlayersList.length % this.teamSizeSelected != 0) {
+        warningText += `Add ${this.teamSizeSelected - this.tourPlayersList.length % this.teamSizeSelected} more player(s). If not, ${this.tourPlayersList.length % this.teamSizeSelected} player(s) will not participate.`
+      }
+      this.warningText = warningText;
+      this.validationText = errorText;
+    },
     setFormDefaults(){
       this.tourName = this.formDefaults.tourName;
       this.tourPlayers = this.formDefaults.tourPlayers;
@@ -208,21 +223,20 @@ export default {
     },
     onSubmit(e) {
       e.preventDefault();
-      this.startTournament();
+      if (this.validationText == '') {
+        this.startTournament();
+      }
     },
     startTournament() {
-      var players = this.tourPlayers.map(i => {
-        return i.text;
-      });
+      this.waitForTournamentStarted = true;
       var tourTeams = [];
-      while (players.length > this.teamSizeSelected-1) {
+      while (this.tourPlayersList.length > this.teamSizeSelected-1) {
         var team = [];
         for (var i = 0; i < this.teamSizeSelected; i++) {
-          team.push(players.splice(this.randNum(0, players.length-1), 1)[0])
+          team.push(this.tourPlayersList.splice(this.randNum(0, this.tourPlayersList.length-1), 1)[0])
         }
         tourTeams.push(team);
       }
-
       let tourData = {
         boardId : this.boardId,
         tourName : this.tourName,
@@ -230,9 +244,11 @@ export default {
         active : true,
       };
       new this.$Parse.Object("Tournament", tourData).save().then((game) => {
+        this.waitForTournamentStarted = false;
         console.log(`Tournament succesfully added.`);
         this.setFormDefaults();
       }, (error) => {
+        this.waitForTournamentStarted = false;
         alert('Failed to add tournament, with error code: ' + error.message);
       });
     },
@@ -252,15 +268,14 @@ export default {
       var tournamentQueryResult = await query.find();
       this.tournament = tournamentQueryResult[0];
     },
-    addGame(gameData) {
-      new this.$Parse.Object("Game", gameData).save().then((game) => {
-        console.log(`Game succesfully added.`);
-      }, (error) => {
-        alert('Failed to add game, with error code: ' + error.message);
-      });
-    },
     strTourNameIfSet(tourName){
       return tourName != '' ? ' "'+this.tournament.get('tourName')+'"' : '';
+    },
+    arraysEqual(arr1, arr2) {
+      if(arr1.sort().join(',')=== arr2.sort().join(',')){
+        return true;
+      }
+      return false;
     }
   },
   created () {
