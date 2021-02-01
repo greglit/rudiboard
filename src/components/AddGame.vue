@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-form>
+    <b-form @submit="onSubmit">
       <b-container class="mt-5 pb-3 px-0">
       <b-row class="">
         <b-col class="">
@@ -25,15 +25,15 @@
       </b-row>
       <b-row>
         <b-col class="px-1">
-          <b-form-input v-model="team1Score" placeholder="Score team 1" class="rounded-0"></b-form-input>
+          <b-form-input v-model="team1Score" type="number" placeholder="Score team 1" class="rounded-0"></b-form-input>
         </b-col>
         <b-col cols="1" class="p-0">:</b-col>
         <b-col class="px-1">
-          <b-form-input v-model="team2Score" placeholder="Score team 2" class="rounded-0"></b-form-input>
+          <b-form-input v-model="team2Score" type="number" placeholder="Score team 2" class="rounded-0"></b-form-input>
         </b-col>
       </b-row>
       </b-container>
-      <b-button @click="addGame()" variant="rudi">Add Game</b-button>
+      <b-button type="submit" variant="rudi">Add Game</b-button>
     </b-form>
   </div>
 </template>
@@ -72,6 +72,10 @@ export default {
     },
   },
   methods: {
+    onSubmit(e) {
+      e.preventDefault();
+      this.addGame()
+    },
     addGame() {
       var team1Names = this.team1.map(i => {
         return i.text;

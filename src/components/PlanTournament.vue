@@ -1,6 +1,6 @@
 <template>
   <div class="mt-4">
-    <b-form v-if="tournament == undefined">
+    <b-form v-if="tournament == undefined" @submit="onSubmit">
       <b-form-input v-model="tourName" placeholder="Enter tournament name" class="rounded-0"></b-form-input>
       <vue-tags-input
         v-model="tourPlayersCurrent"
@@ -31,10 +31,10 @@
         ></b-form-radio-group>
       </b-form-group>-->
 
-      <b-button @click="startTournament()" variant="rudi">Start Tournament!</b-button>
+      <b-button type="submit" variant="rudi">Start Tournament!</b-button>
     </b-form>
 
-    <b-form v-else>
+    <div v-else>
       <b-navbar class="p-0">
         <b-navbar-nav>
           <b-nav-text>
@@ -49,7 +49,7 @@
       </b-navbar>
       <span class="float-left">Next Games:</span>
       <b-container class="px-0 mt-5">
-        <div :key="index" v-for="(game, index) in openGames" class="mt-4">
+        <b-form :key="index" v-for="(game, index) in openGames" class="mt-4">
           <b-row>
             <b-col>
               <player-badge :name="getTeamNameList(game.team1)" class="float-right pb-2"/>
@@ -61,17 +61,17 @@
           </b-row>
           <b-row>
             <b-col class="px-1">
-              <b-form-input v-model="game.team1Score" placeholder="Score team 1" class="rounded-0"></b-form-input>
+              <b-form-input type="number" v-model="game.team1Score" placeholder="Score team 1" class="rounded-0"></b-form-input>
             </b-col>
             <b-col cols="1" class="p-0">:</b-col>
             <b-col class="px-1">
-              <b-form-input v-model="game.team2Score" placeholder="Score team 2" class="rounded-0"></b-form-input>
+              <b-form-input type="number" v-model="game.team2Score" placeholder="Score team 2" class="rounded-0"></b-form-input>
             </b-col>
           </b-row>
           <b-button @click="addGame(game)" variant="rudi" class="mt-2">Enter Game</b-button>
-        </div>
+        </b-form>
       </b-container>
-    </b-form>
+    </div>
   </div>
 </template>
 
@@ -206,6 +206,10 @@ export default {
       this.teamAlgoSelected = this.formDefaults.teamAlgoSelected;
       //this.tourModeSelected = this.formDefaults.tourModeSelected;
     },
+    onSubmit(e) {
+      e.preventDefault();
+      this.startTournament();
+    },
     startTournament() {
       var players = this.tourPlayers.map(i => {
         return i.text;
@@ -224,9 +228,10 @@ export default {
         tourName : this.tourName,
         teams : tourTeams,
         active : true,
-      }
+      };
       new this.$Parse.Object("Tournament", tourData).save().then((game) => {
-        console.log(`Tournament succesfully added.`)
+        console.log(`Tournament succesfully added.`);
+        this.setFormDefaults();
       }, (error) => {
         alert('Failed to add tournament, with error code: ' + error.message);
       });
@@ -243,19 +248,19 @@ export default {
     },
     async fetchData() {
       var query = new this.$Parse.Query('Tournament');
-      query.equalTo("boardId", this.boardId).equalTo("active", true)
+      query.equalTo("boardId", this.boardId).equalTo("active", true);
       var tournamentQueryResult = await query.find();
       this.tournament = tournamentQueryResult[0];
     },
     addGame(gameData) {
       new this.$Parse.Object("Game", gameData).save().then((game) => {
-        console.log(`Game succesfully added.`)
+        console.log(`Game succesfully added.`);
       }, (error) => {
         alert('Failed to add game, with error code: ' + error.message);
       });
     },
     strTourNameIfSet(tourName){
-      return tourName != '' ? ' "'+this.tournament.get('tourName')+'"' : ''
+      return tourName != '' ? ' "'+this.tournament.get('tourName')+'"' : '';
     }
   },
   created () {
@@ -268,15 +273,15 @@ export default {
     let subscription = await query.subscribe();
     subscription.on('create', game => {
       //console.log('create')
-      this.fetchData()
+      this.fetchData();
     });
     subscription.on('delete', game => {
       //console.log('delete')
-      this.fetchData()
+      this.fetchData();
     });
     subscription.on('update', game => {
       //console.log('update')
-      this.fetchData()
+      this.fetchData();
     });
   },
 }
