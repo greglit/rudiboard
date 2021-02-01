@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-alert variant="primary" show fade class="p-1">
+    <b-alert :variant="game.get('team1Score')==0 || game.get('team2Score')==0 ? 'rudi' : 'primary' " show fade class="p-1">
       <span class="float-left date gray">{{getDateAsString(game.get('createdAt'))}}</span>
       <span class="float-right delete gray" @click="deleteGame()">
         <b-icon-trash-fill/>

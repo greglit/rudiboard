@@ -42,6 +42,9 @@ Vue.mixin({
       if (ownScore - otherScore > 0) { //team1 won
         player['wins'] += 1
         player['points'] += 3
+        if (otherScore == 0) {
+          player['winsToZero'] += 1;
+        }
       } else if (ownScore - otherScore == 0) { //draw
         player['draws'] += 1
         player['points'] += 1

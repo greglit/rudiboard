@@ -51,6 +51,7 @@ export default {
         { key: "losses", label: "Losses", sortable: true },
         { key: "goalsFor", label: "Goals For", sortable: true },
         { key: "goalsAgainst", label: "Goals Against", sortable: true },
+        { key: "winsToZero", label: "Wins To Zero", sortable: true },
       ]
     }
   },
@@ -74,6 +75,7 @@ export default {
           goalsAgainst: 0,
           goalDifference: 0,
           points : 0,
+          winsToZero: 0,
         };
       }
       for (const game of this.games) {
