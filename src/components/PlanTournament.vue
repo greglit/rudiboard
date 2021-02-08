@@ -6,6 +6,7 @@
         v-model="tourPlayersCurrent"
         :tags="tourPlayers"
         :autocomplete-items="filteredItems"
+        add-on-key="[',' , 32]" autocomplete-min-length="0"
         @tags-changed="newTags => tourPlayers = newTags"
         placeholder="Add players to the tournament"
         class="w-100 mw-100 mt-3"

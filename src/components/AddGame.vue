@@ -15,11 +15,13 @@
         <b-col class="px-1">
           <vue-tags-input v-model="team1current" :tags="team1" :autocomplete-items="filteredItems"
             @tags-changed="newTags => team1 = newTags" placeholder="Add members" class="w-100 mw-100"
+            add-on-key="[',' , 32]" autocomplete-min-length="0"
           />
         </b-col>
         <b-col class="px-1">
           <vue-tags-input v-model="team2current" :tags="team2" :autocomplete-items="filteredItems"
             @tags-changed="newTags => team2 = newTags" placeholder="Add members" class="w-100 mw-100"
+            add-on-key="[',' , 32]" autocomplete-min-length="0"
           />
         </b-col>
       </b-row>
