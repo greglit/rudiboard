@@ -39,7 +39,7 @@
               <add-game :players="playerList"/>
             </b-tab>
             <b-tab title="Plan Tournament">
-              <plan-tournament :players="playerList" :games="games"/>
+              <plan-tournament :players="playerList" :games="games" :playerData="playerData"/>
             </b-tab>
           </b-tabs>
         </b-card>
@@ -48,10 +48,10 @@
         <game-list :games="games" :newestGameId="newestGameId" class="mb-4"/>
         <br>
         <br>
-        <score-table :games="games" :players="playerList"/>
+        <score-table :playersData="playerData"/>
         <br>
         <br>
-        <score-table :games="games" :players="teamList" teams="true"/>
+        <score-table :playersData="teamData" teams="true"/>
 
       </div>
       
@@ -122,6 +122,9 @@ export default {
       }
       return playerList;
     },
+    playerData() {
+      return this.getPlayersDataList(this.playerList, false);
+    },
     teamList() {
       var teamList = [];
       for (const game of this.games) {
@@ -139,6 +142,9 @@ export default {
         }
       }
       return teamList;
+    },
+    teamData(){
+      return this.getPlayersDataList(this.teamList, true);
     }
   },
   methods: {
@@ -152,6 +158,47 @@ export default {
       var boardQueryResult = await boardQuery.find();
       this.board = boardQueryResult[0]
       this.loading = false;
+    },
+    getPlayersDataList(players, playersAreTeams) {
+      var playerDict = {};
+      for (const player of players) {
+        playerDict[player] = {
+          gamesPlayed: 0,
+          wins: 0,
+          draws: 0,
+          losses: 0,
+          goalsFor : 0,
+          goalsAgainst: 0,
+          goalDifference: 0,
+          points : 0,
+          winsToZero: 0,
+        };
+      }
+      for (const game of this.games) {
+        if (playersAreTeams) {
+          if (game.get('team1').length > 1) {
+            var team1name = this.getTeamNameList(game.get('team1'));
+            playerDict[team1name] = this.assignPoints(playerDict[team1name], game.get('team1Score'), game.get('team2Score'));
+          }
+          if (game.get('team2').length > 1) {
+            var team2name = this.getTeamNameList(game.get('team2'));
+            playerDict[team2name] = this.assignPoints(playerDict[team2name], game.get('team2Score'), game.get('team1Score'));
+          }
+        } else {
+          for (const player of game.get('team1')) {
+            playerDict[player] = this.assignPoints(playerDict[player], game.get('team1Score'), game.get('team2Score'));
+          }
+          for (const player of game.get('team2')) {
+            playerDict[player] = this.assignPoints(playerDict[player], game.get('team2Score'), game.get('team1Score'));
+          }
+        }
+      }
+      var playerList = [];
+      for (const [key, value] of Object.entries(playerDict)) {
+        value['name'] = key;
+        playerList.push(value);
+      }
+      return playerList;
     },
     isNew(game) { //:class="isNew(game) ?'tdFadeInUp':''"
       let createdAt = game.get('createdAt');

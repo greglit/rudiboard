@@ -17,8 +17,8 @@
         {{warningText}}
       </b-form-text>
       <b-form-group label="Select team size:" label-size="sm" label-cols="6" class="mt-3">
-        <b-form-input
-          type="number"
+        <b-form-spinbutton
+          min="1" max="100"
           v-model="teamSizeSelected"
           class="rounded-0"
         />
@@ -74,7 +74,7 @@ export default {
     PlayerBadge,
     TourAddGame,
   },
-  props: ['players', 'games'],
+  props: ['players', 'games', 'playerData'],
   data() {
     return {
       boardId: this.$route.params.boardId,
@@ -88,7 +88,7 @@ export default {
       teamAlgoSelected: String,
       teamAlgoOptions: [
         { text: 'random teams', value: 'random' },
-        { text: 'balanced teams', value: 'balanced', disabled: true },
+        { text: 'balanced teams', value: 'balanced', disabled: false },
       ],
 
       /*tourModeSelected: String,
@@ -196,8 +196,8 @@ export default {
   },
   watch: {
     formInputsValidationWrapper(newVal, oldVal) {
-      const [oldTourPlayers, oldteamSizeSelected] = oldVal.split('|');
-      const [newtourPlayers, newteamSizeSelected] = newVal.split('|');
+      //const [oldTourPlayers, oldteamSizeSelected] = oldVal.split('|');
+      //const [newtourPlayers, newteamSizeSelected] = newVal.split('|');
       this.validateForm()
     },
   },
@@ -212,6 +212,7 @@ export default {
       }
       this.warningText = warningText;
       this.validationText = errorText;
+      this.teamAlgoOptions[1].disabled = this.teamSizeSelected <= 1;
     },
     setFormDefaults(){
       this.tourName = this.formDefaults.tourName;
@@ -227,16 +228,63 @@ export default {
         this.startTournament();
       }
     },
-    startTournament() {
-      this.waitForTournamentStarted = true;
+    getRandomTeams(tourPlayersList, teamSizeSelected) {
       var tourTeams = [];
-      while (this.tourPlayersList.length > this.teamSizeSelected-1) {
+      while (tourPlayersList.length > teamSizeSelected-1) {
         var team = [];
-        for (var i = 0; i < this.teamSizeSelected; i++) {
-          team.push(this.tourPlayersList.splice(this.randNum(0, this.tourPlayersList.length-1), 1)[0])
+        for (var i = 0; i < teamSizeSelected; i++) {
+          team.push(tourPlayersList.splice(this.randNum(0, tourPlayersList.length-1), 1)[0])
         }
         tourTeams.push(team);
       }
+      return tourTeams;
+    },
+    getBalancedTeams(tourPlayersList, teamSizeSelected) {
+      for (var i = 0; i < tourPlayersList.length % teamSizeSelected; i++) {
+        tourPlayersList.splice(this.randNum(0, tourPlayersList.length-1), 1);
+      }
+      console.log(tourPlayersList);
+      const playersToSort = this.playerData.filter(player => tourPlayersList.includes(player.name));
+      console.log(JSON.stringify(playersToSort));
+      var sortedPlayers = playersToSort.sort((a, b) => b.points-a.points);
+      console.log(JSON.stringify(sortedPlayers))
+      for (const player of tourPlayersList) {
+        for (const sortPlayer of sortedPlayers) {
+          var found = false;
+          if (sortPlayer.name == player) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) {
+          sortedPlayers.push({name:player});
+        } 
+      }
+      console.log(JSON.stringify(sortedPlayers))
+      var tourTeams = [];
+      while (sortedPlayers.length > 0) {
+        var team = [];
+        for (var i = 0; i < this.teamSizeSelected; i++) {
+          if (i % 2 != 0){
+            team.push(sortedPlayers.pop().name)
+          } else {
+            team.push(sortedPlayers.shift().name)
+          }
+        }
+        tourTeams.push(team);
+      }
+      console.log(JSON.stringify(tourTeams))
+      return tourTeams;
+    },
+    startTournament() {
+      this.waitForTournamentStarted = true;
+      var tourTeams;
+      if (this.teamAlgoSelected == 'balanced') {
+        tourTeams = this.getBalancedTeams(this.tourPlayersList, this.teamSizeSelected);
+      } else { 
+        tourTeams = this.getRandomTeams(this.tourPlayersList, this.teamSizeSelected);
+      }
+      console.log(tourTeams);
       let tourData = {
         boardId : this.boardId,
         tourName : this.tourName,

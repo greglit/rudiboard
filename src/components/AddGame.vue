@@ -25,11 +25,11 @@
       </b-row>
       <b-row>
         <b-col class="px-1">
-          <b-form-input v-model="team1Score" type="number" placeholder="Score team 1" class="rounded-0" required></b-form-input>
+          <b-form-input v-model="team1Score" type="tel" placeholder="Score team 1" class="rounded-0" required></b-form-input>
         </b-col>
         <b-col cols="1" class="p-0">:</b-col>
         <b-col class="px-1">
-          <b-form-input v-model="team2Score" type="number" placeholder="Score team 2" class="rounded-0" required></b-form-input>
+          <b-form-input v-model="team2Score" type="tel" placeholder="Score team 2" class="rounded-0" required></b-form-input>
         </b-col>
       </b-row>
       </b-container>
@@ -62,10 +62,7 @@ export default {
       team1Score: '',
       team2Score: '',
 
-      validationText: '',
-      team1gotInput: false,
-      team2gotInput: false,
-
+      triedToSubmit: false;
       waitForGameAdded: false,
     }
   },
@@ -93,7 +90,20 @@ export default {
     },
     formInputsWrapper() {
       return `${this.team1}|${this.team2}`;
-    }
+    },
+    validationText() {
+      var errorText = '';
+      if (this.team1.length == 0) {
+        errorText += 'Team 1 must contain at least one member. '
+      }
+      if (this.team2.length == 0 &&) {
+        errorText += 'Team 2 must contain at least one member. '
+      }
+      if (this.arraysHaveCommonElement(this.team1Array, this.team2Array)) {
+        errorText += `A player can't be in two teams at once. `
+      }
+      return errorText;
+    },
   },
   watch: {
     formInputsWrapper(newVal, oldVal) {
@@ -131,19 +141,6 @@ export default {
         this.waitForGameAdded = false;
         alert('Failed to add game, with error code: ' + error.message);
       });
-    },
-    validateForm() {
-      var errorText = '';
-      if (this.team1.length == 0 && this.team1gotInput) {
-        errorText += 'Team 1 must contain at least one member. '
-      }
-      if (this.team2.length == 0 && this.team2gotInput) {
-        errorText += 'Team 2 must contain at least one member. '
-      }
-      if (this.arraysHaveCommonElement(this.team1Array, this.team2Array)) {
-        errorText += `A player can't be in two teams at once. `
-      }
-      this.validationText = errorText;
     },
     arraysHaveCommonElement(arr1, arr2) {
       return arr1.some(item => arr2.includes(item));

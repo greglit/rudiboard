@@ -34,13 +34,16 @@ export default {
     PlayerBadge,
   },
   name: 'GameList',
-  props: ['games', 'players', 'teams'],
+  props: ['playersData', 'teams'],
   data() {
     return {
       showMore: false,
       numberItemsDisplayed: 5,
       sortBy: 'points',
       sortDesc: true,
+
+      items: this.playersData,
+
       fields: [
         { key: "name", label: "Name", sortable: true },
         { key: "points", label: "Points", sortable: true },
@@ -52,7 +55,7 @@ export default {
         { key: "goalsFor", label: "Goals For", sortable: true },
         { key: "goalsAgainst", label: "Goals Against", sortable: true },
         { key: "winsToZero", label: "Wins To Zero", sortable: true },
-      ]
+      ],
     }
   },
   computed: {
@@ -62,47 +65,6 @@ export default {
       } else {
         return this.items.slice(0, this.numberItemsDisplayed);
       }
-    },
-    items() {
-      var playerDict = {};
-      for (const player of this.players) {
-        playerDict[player] = {
-          gamesPlayed: 0,
-          wins: 0,
-          draws: 0,
-          losses: 0,
-          goalsFor : 0,
-          goalsAgainst: 0,
-          goalDifference: 0,
-          points : 0,
-          winsToZero: 0,
-        };
-      }
-      for (const game of this.games) {
-        if (this.teams) {
-          if (game.get('team1').length > 1) {
-            var team1name = this.getTeamNameList(game.get('team1'));
-            playerDict[team1name] = this.assignPoints(playerDict[team1name], game.get('team1Score'), game.get('team2Score'));
-          }
-          if (game.get('team2').length > 1) {
-            var team2name = this.getTeamNameList(game.get('team2'));
-            playerDict[team2name] = this.assignPoints(playerDict[team2name], game.get('team2Score'), game.get('team1Score'));
-          }
-        } else {
-          for (const player of game.get('team1')) {
-            playerDict[player] = this.assignPoints(playerDict[player], game.get('team1Score'), game.get('team2Score'));
-          }
-          for (const player of game.get('team2')) {
-            playerDict[player] = this.assignPoints(playerDict[player], game.get('team2Score'), game.get('team1Score'));
-          }
-        }
-      }
-      var playerList = [];
-      for (const [key, value] of Object.entries(playerDict)) {
-        value['name'] = key;
-        playerList.push(value);
-      }
-      return playerList;
     },
   },
   methods: {
