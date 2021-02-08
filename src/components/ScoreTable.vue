@@ -3,6 +3,7 @@
     <section-nav 
       :title="teams? 'Team Standings' : 'Player Standings'" 
       :showMore.sync="showMore"
+      :showMoreNeeded="playersData.length > numberItemsDisplayed"
     />
     
     <div style="overflow:hidden">
@@ -42,8 +43,6 @@ export default {
       sortBy: 'points',
       sortDesc: true,
 
-      items: this.playersData,
-
       fields: [
         { key: "name", label: "Name", sortable: true },
         { key: "points", label: "Points", sortable: true },
@@ -61,9 +60,9 @@ export default {
   computed: {
     displayedItems() {
       if (this.showMore) {
-        return this.items
+        return this.playersData
       } else {
-        return this.items.slice(0, this.numberItemsDisplayed);
+        return this.playersData.slice(0, this.numberItemsDisplayed);
       }
     },
   },

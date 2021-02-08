@@ -7,7 +7,7 @@
     </b-navbar-nav>
     <b-navbar-nav class="ml-auto">
       <b-nav-item right>
-        <b-button variant="outline-primary" size="sm" @click="toggleShowMore()">
+        <b-button v-if="showMoreNeeded" variant="outline-primary" size="sm" @click="toggleShowMore()">
           <div v-if="!showMore">
             Show more
             <b-icon-arrow-down/>
@@ -27,7 +27,8 @@ export default {
   name: 'Navbar',
   props: {
     title : String,
-    showMore : Boolean
+    showMore : Boolean,
+    showMoreNeeded: Boolean,
   },
   data() {
       return {

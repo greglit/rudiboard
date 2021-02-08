@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section-nav title="Games" :showMore.sync="showMore" />
+    <section-nav title="Games" :showMore.sync="showMore" :showMoreNeeded="games.length > numberGamesDisplayed"/>
 
     <div :key="'game'+game.objectId+key" v-for="(game, key) in displayedGames" :class="game.id == newestGameId ?'tdFadeInUp':''">
       <game-card :game="game"/>
