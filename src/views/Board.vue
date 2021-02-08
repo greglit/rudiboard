@@ -35,11 +35,11 @@
         <b-card class="mb-4">
           <b-tabs pills fill content-class="">
             <hr>
-            <b-tab title="Add Game" active>
+            <b-tab title="Add Game" :active="tournament == undefined">
               <add-game :players="playerList"/>
             </b-tab>
-            <b-tab title="Plan Tournament">
-              <plan-tournament :players="playerList" :games="games" :playerData="playerData"/>
+            <b-tab :title="(tournament == undefined ? 'Plan' : 'Running') +' Tournament'" :active="tournament != undefined">
+              <plan-tournament :tournament="tournament" :players="playerList" :games="games" :playerData="playerData"/>
             </b-tab>
           </b-tabs>
         </b-card>
@@ -83,6 +83,7 @@ export default {
       loading: true,
       games: [],
       board: Object,
+      tournament: undefined,
       notifySound: Object,
       newestGameId: String,
     }
@@ -97,16 +98,32 @@ export default {
     '$route': 'fetchData'
   },
   async mounted() {
-    var query = new this.$Parse.Query('Game');
-    query.equalTo("boardId", this.$route.params.boardId)
-    let subscription = await query.subscribe();
-    subscription.on('create', game => {
+    var gameQuery = new this.$Parse.Query('Game');
+    gameQuery.equalTo("boardId", this.$route.params.boardId)
+    let gameSubscription = await gameQuery.subscribe();
+    gameSubscription.on('create', game => {
       this.notifySound.play();
       this.newestGameId = game.id;
       this.fetchData()
     });
-    subscription.on('delete', game => {
+    gameSubscription.on('delete', game => {
       this.fetchData()
+    });
+
+    var tourQuery = new this.$Parse.Query('Tournament');
+    tourQuery.equalTo("boardId", this.$route.params.boardId);
+    let tourSubscription = await tourQuery.subscribe();
+    tourSubscription.on('create', game => {
+      //console.log('create')
+      this.fetchData();
+    });
+    tourSubscription.on('delete', game => {
+      //console.log('delete')
+      this.fetchData();
+    });
+    tourSubscription.on('update', game => {
+      //console.log('update')
+      this.fetchData();
     });
   },
   computed: {
@@ -157,6 +174,12 @@ export default {
       boardQuery.equalTo("boardId", this.$route.params.boardId);
       var boardQueryResult = await boardQuery.find();
       this.board = boardQueryResult[0]
+      
+      var tourQuery = new this.$Parse.Query('Tournament');
+      tourQuery.equalTo("boardId", this.$route.params.boardId).equalTo("active", true);
+      var tournamentQueryResult = await tourQuery.find();
+      this.tournament = tournamentQueryResult[0];
+
       this.loading = false;
     },
     getPlayersDataList(players, playersAreTeams) {

@@ -37,7 +37,9 @@
         ></b-form-radio-group>
       </b-form-group>-->
       <b-button type="submit" variant="rudi" :disabled="validationText != '' || waitForTournamentStarted">
-        <b-icon v-if="waitForTournamentStarted" icon="arrow-clockwise" animation="spin" font-scale="1"/>Start Tournament!
+        <b-icon v-if="waitForTournamentStarted" icon="arrow-clockwise" animation="spin" class="mr-2"/>
+        <b-icon-flag v-else class="mr-2"/>
+        Start Tournament!
       </b-button>
     </b-form>
 
@@ -74,11 +76,10 @@ export default {
     PlayerBadge,
     TourAddGame,
   },
-  props: ['players', 'games', 'playerData'],
+  props: ['tournament','players', 'games', 'playerData'],
   data() {
     return {
       boardId: this.$route.params.boardId,
-      tournament: undefined,
 
       tourName: String,
       tourPlayers: Array,
@@ -153,8 +154,8 @@ export default {
               boardId : this.boardId,
               team1 : team1Players,
               team2 : team2Players,
-              team1Score : undefined,
-              team2Score : undefined,
+              team1Score : '',
+              team2Score : '',
               tournamentId : this.tournament.id,
               description : `Tournament${this.strTourNameIfSet(this.tournament.get('tourName'))}`,
             }
@@ -310,12 +311,6 @@ export default {
         });
       }
     },
-    async fetchData() {
-      var query = new this.$Parse.Query('Tournament');
-      query.equalTo("boardId", this.boardId).equalTo("active", true);
-      var tournamentQueryResult = await query.find();
-      this.tournament = tournamentQueryResult[0];
-    },
     strTourNameIfSet(tourName){
       return tourName != '' ? ' "'+this.tournament.get('tourName')+'"' : '';
     },
@@ -328,24 +323,6 @@ export default {
   },
   created () {
     this.setFormDefaults();
-    this.fetchData();
-  },
-  async mounted() {
-    var query = new this.$Parse.Query('Tournament');
-    query.equalTo("boardId", this.boardId);
-    let subscription = await query.subscribe();
-    subscription.on('create', game => {
-      //console.log('create')
-      this.fetchData();
-    });
-    subscription.on('delete', game => {
-      //console.log('delete')
-      this.fetchData();
-    });
-    subscription.on('update', game => {
-      //console.log('update')
-      this.fetchData();
-    });
   },
 }
 </script>

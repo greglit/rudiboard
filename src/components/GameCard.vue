@@ -6,27 +6,26 @@
         <b-icon-trash-fill/>
       </span>
       <b-container class="mt-4 pb-0 px-0">
-      <b-row v-if="game.get('description') != undefined">
-        <b-col><span class="tournament">{{game.get('description')}}</span></b-col>
-      </b-row>
-      <b-row class="m-1">
-        <b-col class="px-1">
-          <team-list :team="game.get('team1')" class="float-right"/>
-        </b-col>
-        <b-col cols="1" class="p-0">vs.</b-col>
-        <b-col class="px-1">
-          <team-list :team="game.get('team2')" class="float-left"/>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col class="px-1">
-          <span class="float-right">{{game.get("team1Score")}}</span>
-        </b-col>
-        <b-col cols="1" class="p-0">:</b-col>
-        <b-col class="px-1">
-          <span class="float-left">{{game.get("team2Score")}}</span>
-        </b-col>
-      </b-row>
+        <b-row class="mt-n2">
+          <b-col>
+            <span v-if="game.get('description') != undefined" class="tournament">{{game.get('description')}}</span><br>
+          </b-col>
+        </b-row>
+        <b-row class="m-1">
+          <b-col class="px-1">
+            <team-list :team="game.get('team1')" class="float-right"/>
+          </b-col>
+          <b-col cols="1" class="px-1">
+            <h5 class="float-right">{{game.get("team1Score")}}</h5>
+          </b-col>
+          <b-col cols="1" class="p-0"><h5>:</h5></b-col>
+          <b-col cols="1" class="px-1">
+            <h5 class="float-left">{{game.get("team2Score")}}</h5>
+          </b-col>
+          <b-col class="px-1">
+            <team-list :team="game.get('team2')" class="float-left"/>
+          </b-col>
+        </b-row>
       </b-container>
     </b-alert>
   </div>

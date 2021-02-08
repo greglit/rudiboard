@@ -2,16 +2,16 @@
   <div>
     <b-form @submit="onSubmit">
       <b-container class="mt-5 pb-2 px-0">
-      <b-row class="">
-        <b-col class="">
+      <b-row>
+        <b-col>
           Team 1
         </b-col>
         <b-col cols="1" class="p-0">vs.</b-col>
-        <b-col class="">
+        <b-col>
           Team 2
         </b-col>
       </b-row>
-      <b-row class="pb-3">
+      <b-row class="">
         <b-col class="px-1">
           <vue-tags-input v-model="team1current" :tags="team1" :autocomplete-items="filteredItems"
             @tags-changed="newTags => team1 = newTags" placeholder="Add members" class="w-100 mw-100"
@@ -23,21 +23,32 @@
           />
         </b-col>
       </b-row>
-      <b-row>
+      <b-row class="mb-2">
+        <b-form-invalid-feedback :state="false">
+          {{validationText}}<br>
+        </b-form-invalid-feedback>
+      </b-row>
+      <b-row class="mb-2">
         <b-col class="px-1">
-          <b-form-input v-model="team1Score" type="tel" placeholder="Score team 1" class="rounded-0" required></b-form-input>
+          <b-form-input v-model="team1Score" type="tel" placeholder="Score team 1" class="rounded-0" required :state="validScore1"></b-form-input>
+          <b-form-invalid-feedback :state="validScore1">
+            Please enter a number.
+          </b-form-invalid-feedback>
         </b-col>
         <b-col cols="1" class="p-0">:</b-col>
         <b-col class="px-1">
-          <b-form-input v-model="team2Score" type="tel" placeholder="Score team 2" class="rounded-0" required></b-form-input>
+          <b-form-input v-model="team2Score" type="tel" placeholder="Score team 2" class="rounded-0" required :state="validScore2"></b-form-input>
+          <b-form-invalid-feedback :state="validScore2">
+            Please enter a number.
+          </b-form-invalid-feedback>
         </b-col>
       </b-row>
       </b-container>
-      <b-form-invalid-feedback :state="false">
-        {{validationText}}<br>
-      </b-form-invalid-feedback>
+      
       <b-button type="submit" variant="rudi" :disabled="validationText != '' || waitForGameAdded">
-        <b-icon v-if="waitForGameAdded" icon="arrow-clockwise" animation="spin" font-scale="1"/>Add Game
+        <b-icon v-if="!waitForGameAdded" icon="trophy" class="mr-2"/>
+        <b-icon v-else icon="arrow-clockwise" animation="spin" class="mr-2"/>
+        Add Game
       </b-button>
     </b-form>
   </div>
@@ -62,7 +73,7 @@ export default {
       team1Score: '',
       team2Score: '',
 
-      triedToSubmit: false;
+      triedToSubmit: false,
       waitForGameAdded: false,
     }
   },
@@ -88,15 +99,15 @@ export default {
         return i.text;
       });
     },
-    formInputsWrapper() {
-      return `${this.team1}|${this.team2}`;
-    },
     validationText() {
+      if (!this.triedToSubmit) {
+        return '';
+      }
       var errorText = '';
       if (this.team1.length == 0) {
         errorText += 'Team 1 must contain at least one member. '
       }
-      if (this.team2.length == 0 &&) {
+      if (this.team2.length == 0) {
         errorText += 'Team 2 must contain at least one member. '
       }
       if (this.arraysHaveCommonElement(this.team1Array, this.team2Array)) {
@@ -104,24 +115,26 @@ export default {
       }
       return errorText;
     },
-  },
-  watch: {
-    formInputsWrapper(newVal, oldVal) {
-      const [oldTeam1, oldTeam2] = oldVal.split('|');
-      const [newTeam1, newTeam2] = newVal.split('|');
-      if (!this.team1gotInput) {
-        this.team1gotInput = newTeam1 != '';
+    validScore2() {
+      if (this.team2Score == '' || Number.isInteger(Number(this.team2Score))) {
+        return null;
+      } else {
+        return false;
       }
-      if (!this.team2gotInput) {
-        this.team2gotInput = newTeam2 != '';
+    },
+    validScore1() {
+      if (this.team1Score == '' || Number.isInteger(Number(this.team1Score))) {
+        return null;
+      } else {
+        return false;
       }
-      this.validateForm()
-    }
+    },
   },
   methods: {
     onSubmit(e) {
       e.preventDefault();
-      if (this.validationText == '') {
+      this.triedToSubmit = true;
+      if (this.validationText == '' && this.validScore2 !== false && this.validScore1 !== false) {
         this.addGame();
       }
     },
@@ -136,6 +149,7 @@ export default {
       }
       new this.$Parse.Object("Game", gameData).save().then((game) => {
         this.waitForGameAdded = false;
+        this.triedToSubmit = false;
         console.log(`Game succesfully added.`)
       }, (error) => {
         this.waitForGameAdded = false;
