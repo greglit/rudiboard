@@ -1,6 +1,9 @@
 <template>
   <div>
-    <b-alert :variant="game.get('team1Score')==0 || game.get('team2Score')==0 ? 'rudi' : 'primary' " show fade class="p-1">
+    <b-alert style="overflow:hidden" :variant="game.get('team1Score')==0 || game.get('team2Score')==0 ? 'rudi' : 'primary' " show fade class="p-1">
+      <span v-if="game.get('team1Score')==0 || game.get('team2Score')==0 " class="rudi-game marker">
+        rudi
+      </span>
       <span class="float-left date gray">{{getDateAsString(game.get('createdAt'))}}</span>
       <span class="float-right delete gray" @click="deleteGame()">
         <b-icon-trash-fill/>
@@ -15,11 +18,11 @@
           <b-col class="px-1">
             <team-list :team="game.get('team1')" class="float-right"/>
           </b-col>
-          <b-col cols="1" class="px-1">
+          <b-col cols="1" class="px-1 text-body">
             <h5 class="float-right">{{game.get("team1Score")}}</h5>
           </b-col>
-          <b-col cols="1" class="p-0"><h5>:</h5></b-col>
-          <b-col cols="1" class="px-1">
+          <b-col cols="1" class="p-0 text-body"><h5>:</h5></b-col>
+          <b-col cols="1" class="px-1 text-body">
             <h5 class="float-left">{{game.get("team2Score")}}</h5>
           </b-col>
           <b-col class="px-1">
@@ -27,6 +30,7 @@
           </b-col>
         </b-row>
       </b-container>
+      
     </b-alert>
   </div>
 </template>
@@ -63,6 +67,14 @@ export default {
 </script>
 
 <style scoped>
+.rudi-game {
+  position: absolute;
+  top: -50px;
+  right: 0px;
+  left: 0px;
+  font-size: 120px;
+  opacity: 0.1;
+}
 .delete {
   position: absolute;
   top: 4px;

@@ -140,6 +140,7 @@ export default {
       return playerList;
     },
     playerData() {
+      console.log('playerDatacompute')
       return this.getPlayersDataList(this.playerList, false);
     },
     teamList() {
@@ -161,6 +162,7 @@ export default {
       return teamList;
     },
     teamData(){
+      console.log('teamDatacompute')
       return this.getPlayersDataList(this.teamList, true);
     }
   },

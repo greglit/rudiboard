@@ -73,11 +73,11 @@ export default {
       boardQuery.equalTo("boardId", this.joinBoardID);
       var boardQueryResult = await boardQuery.find();
       if (boardQueryResult != 0) {
-        console.log('boardfound')
+        //console.log('boardfound')
         var board = boardQueryResult[0]
         this.$router.push(`board/${board.get('boardName')}/${board.get("boardId")}`)
       } else {
-        console.log('boardnotfound')
+        //console.log('boardnotfound')
         this.boardNotFound = true;
       }
       

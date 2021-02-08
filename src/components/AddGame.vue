@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form @submit="onSubmit">
-      <b-container class="mt-5 pb-2 px-0">
+      <b-container class="mt-4 pb-3 px-3">
       <b-row>
         <b-col>
           Team 1
@@ -25,7 +25,7 @@
       </b-row>
       <b-row class="mb-2">
         <b-form-invalid-feedback :state="false">
-          {{validationText}}<br>
+          {{validationText}}
         </b-form-invalid-feedback>
       </b-row>
       <b-row class="mb-2">

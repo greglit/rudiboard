@@ -23,11 +23,12 @@
           class="rounded-0"
         />
       </b-form-group>
-      <b-form-group>
+      <b-form-group label="Select team grouping" label-size="sm" :description="teamAlgoDescription[teamAlgoSelected]">
         <b-form-radio-group
-            v-model="teamAlgoSelected" :options="teamAlgoOptions"
+            v-model="teamAlgoSelected" :options="teamAlgoOptions" :disabled="teamSizeSelected <= 1"
             button-variant="outline-primary" buttons size="sm" class="w-100"
         ></b-form-radio-group>
+
       </b-form-group>
       <!--
       <b-form-group>
@@ -88,9 +89,15 @@ export default {
 
       teamAlgoSelected: String,
       teamAlgoOptions: [
-        { text: 'random teams', value: 'random' },
-        { text: 'balanced teams', value: 'balanced', disabled: false },
+        { text: 'random', value: 'random' },
+        { text: 'balanced', value: 'balanced'},
+        { text: 'linear', value: 'linear' },
       ],
+      teamAlgoDescription: {
+        random : 'Players are randomely grouped into tournament teams.',
+        balanced : 'Players are grouped into balanced teams using "advanced AI" ;)',
+        linear : 'Players are grouped from left to right. So the players order in the input field determines teams.',
+      },
 
       /*tourModeSelected: String,
       tourModeOptions: [
@@ -213,7 +220,6 @@ export default {
       }
       this.warningText = warningText;
       this.validationText = errorText;
-      this.teamAlgoOptions[1].disabled = this.teamSizeSelected <= 1;
     },
     setFormDefaults(){
       this.tourName = this.formDefaults.tourName;
@@ -240,15 +246,26 @@ export default {
       }
       return tourTeams;
     },
+    getLinearTeams(tourPlayersList, teamSizeSelected) {
+      var tourTeams = [];
+      while (tourPlayersList.length > teamSizeSelected-1) {
+        var team = [];
+        for (var i = 0; i < teamSizeSelected; i++) {
+          team.push(tourPlayersList.shift())
+        }
+        tourTeams.push(team);
+      }
+      return tourTeams;
+    },
     getBalancedTeams(tourPlayersList, teamSizeSelected) {
       for (var i = 0; i < tourPlayersList.length % teamSizeSelected; i++) {
         tourPlayersList.splice(this.randNum(0, tourPlayersList.length-1), 1);
       }
-      console.log(tourPlayersList);
+      //console.log(tourPlayersList);
       const playersToSort = this.playerData.filter(player => tourPlayersList.includes(player.name));
-      console.log(JSON.stringify(playersToSort));
+      //console.log(JSON.stringify(playersToSort));
       var sortedPlayers = playersToSort.sort((a, b) => b.points-a.points);
-      console.log(JSON.stringify(sortedPlayers))
+      //console.log(JSON.stringify(sortedPlayers))
       for (const player of tourPlayersList) {
         for (const sortPlayer of sortedPlayers) {
           var found = false;
@@ -261,7 +278,7 @@ export default {
           sortedPlayers.push({name:player});
         } 
       }
-      console.log(JSON.stringify(sortedPlayers))
+      //console.log(JSON.stringify(sortedPlayers))
       var tourTeams = [];
       while (sortedPlayers.length > 0) {
         var team = [];
@@ -274,7 +291,7 @@ export default {
         }
         tourTeams.push(team);
       }
-      console.log(JSON.stringify(tourTeams))
+      //console.log(JSON.stringify(tourTeams))
       return tourTeams;
     },
     startTournament() {
@@ -282,10 +299,12 @@ export default {
       var tourTeams;
       if (this.teamAlgoSelected == 'balanced') {
         tourTeams = this.getBalancedTeams(this.tourPlayersList, this.teamSizeSelected);
-      } else { 
+      } else if (this.teamAlgoSelected == 'linear') { 
+        tourTeams = this.getLinearTeams(this.tourPlayersList, this.teamSizeSelected);
+      } else {
         tourTeams = this.getRandomTeams(this.tourPlayersList, this.teamSizeSelected);
       }
-      console.log(tourTeams);
+      //console.log(tourTeams);
       let tourData = {
         boardId : this.boardId,
         tourName : this.tourName,
