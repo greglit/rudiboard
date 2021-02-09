@@ -49,7 +49,7 @@
       
       <b-button type="submit" variant="rudi" :disabled="validationText != '' || waitForGameAdded">
         <b-icon v-if="!waitForGameAdded" icon="trophy" class="mr-2"/>
-        <b-icon v-else icon="arrow-clockwise" animation="spin" class="mr-2"/>
+        <b-spinner v-else label="Spinning" class="mr-2" small></b-spinner>
         Add Game
       </b-button>
     </b-form>

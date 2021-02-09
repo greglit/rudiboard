@@ -39,7 +39,7 @@
         ></b-form-radio-group>
       </b-form-group>-->
       <b-button type="submit" variant="rudi" :disabled="validationText != '' || waitForTournamentStarted">
-        <b-icon v-if="waitForTournamentStarted" icon="arrow-clockwise" animation="spin" class="mr-2"/>
+        <b-spinner v-if="waitForTournamentStarted" label="Spinning" class="mr-2" small></b-spinner>
         <b-icon-flag v-else class="mr-2"/>
         Start Tournament!
       </b-button>

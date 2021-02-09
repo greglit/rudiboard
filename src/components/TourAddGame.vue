@@ -21,7 +21,7 @@
         </b-col>
         </b-row>
         <b-button type="submit" variant="rudi" class="mt-2" :disabled="waitForGameAdded">
-          <b-icon v-if="waitForGameAdded" icon="arrow-clockwise" animation="spin" class="mr-2"/>
+          <b-spinner v-if="waitForGameAdded" label="Spinning" class="mr-2" small></b-spinner>
           <b-icon-trophy v-else  class="mr-2"/>
           Enter Game
         </b-button>

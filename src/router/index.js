@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Board from '../views/Board.vue'
 import Player from '../views/Player.vue'
+import Invitation from '../views/Invitation.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
   {
     path: '/player/:boardName/:boardId/:playerName',
     component: Player
+  },
+  {
+    name: 'invite',
+    path: '/invite/:boardName/:boardId/',
+    component: Invitation
   },
 ]
 

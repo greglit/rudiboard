@@ -10,6 +10,10 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
+import VueClipboard from 'vue-clipboard2'
+//VueClipboard.config.autoSetContainer = true // add this line
+Vue.use(VueClipboard)
+
 import Parse from 'parse'
 Vue.prototype.$parseAppId = 'bXXXBwI0yPdP41daYTIcSTBU5LoJOQ2Q8JYOpfj5';
 Vue.prototype.$parseJsKey = 'rdCXaBV9yLuCm0AxFhv4w3Zwp3VJODV0F5xf5qiK';
