@@ -1,24 +1,26 @@
 <template>
-  <div>
+  <div style="position:relative;" :class="!showMore? 'show-less':''">
     <section-nav 
-      :title="teams? 'Team Standings' : 'Player Standings'" 
-      :showMore.sync="showMore"
-      :showMoreNeeded="playersData.length > numberItemsDisplayed"
+      :title="teams? 'Team Standings' : 'Player Standings'"
     />
-    
-    <div style="overflow:hidden">
-      <b-table responsive
-        :items="displayedItems"
-        :fields="fields"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
-        striped 
-      >
-        <template v-slot:cell(name)="data">
-          <player-badge :name="data.value" />
-        </template>
-      </b-table>
-    </div>
+    <b-container style="overflow:hidden;" class="m-0 p-0">
+      <b-row>
+        <b-col>
+        <b-table responsive
+          :items="playersData"
+          :fields="fields"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+          striped  >
+          <template v-slot:cell(name)="data">
+            <player-badge :name="data.value" />
+          </template>
+        </b-table>
+        </b-col>
+      </b-row>
+    </b-container>
+
+    <show-more v-if="playersData.length > numberItemsDisplayed" :showMore.sync="showMore"/>
   </div>
 </template>
 
@@ -27,12 +29,14 @@ import _template from '../_template.vue'
 import GameCard from './GameCard.vue'
 import PlayerBadge from './PlayerBadge.vue'
 import SectionNav from './SectionNav.vue'
+import ShowMore from './ShowMore.vue'
 
 export default {
   components: { 
     GameCard,
     SectionNav,
     PlayerBadge,
+    ShowMore,
   },
   name: 'GameList',
   props: ['playersData', 'teams'],
@@ -57,20 +61,12 @@ export default {
       ],
     }
   },
-  computed: {
-    displayedItems() {
-      if (this.showMore) {
-        return this.playersData
-      } else {
-        return this.playersData.slice(0, this.numberItemsDisplayed);
-      }
-    },
-  },
-  methods: {
-  }
 }
 </script>
 
 <style scoped>
-
+.show-less {
+  max-height: 400px;
+  overflow-y:hidden;
+}
 </style>

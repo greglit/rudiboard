@@ -1,27 +1,5 @@
 <template>
   <div>
-    <navbar>
-      <b-navbar-nav class="abs-center-x">
-        <b-nav-text>
-          <h1 class="text-center mb-0 board-title marker">
-            <router-link :to="'/board/'+$route.params.boardName+'/'+$route.params.boardId">
-              {{$route.params.boardName}}
-            </router-link>
-          </h1>
-        </b-nav-text>
-      </b-navbar-nav>
-      <b-navbar-nav class="ml-auto m-n1">
-        <b-nav-item right>
-          <b-button variant="secondary border-0" size="sm" v-b-modal.shareModal>
-            <b-icon-share-fill/>
-          </b-button>
-        </b-nav-item>
-      </b-navbar-nav>
-    </navbar>
-    <b-modal hide-footer size="lg" id="shareModal" title="Share this board with others">
-      ID:{{$route.params.boardId}}
-    </b-modal>
-
     <b-container class="mt-4 px-md-0">
       <div v-if="loading">
         <b-card>
@@ -45,6 +23,7 @@
         </b-card>
         
         <br>
+        <br>
         <game-list :games="games" :newestGameId="newestGameId" class="mb-4"/>
         <br>
         <br>
@@ -52,6 +31,8 @@
         <br>
         <br>
         <score-table :playersData="teamData" teams="true"/>
+        <br>
+        <br>
 
       </div>
       
@@ -140,7 +121,7 @@ export default {
       return playerList;
     },
     playerData() {
-      console.log('playerDatacompute')
+      //console.log('playerDatacompute')
       return this.getPlayersDataList(this.playerList, false);
     },
     teamList() {
@@ -162,7 +143,7 @@ export default {
       return teamList;
     },
     teamData(){
-      console.log('teamDatacompute')
+      //console.log('teamDatacompute')
       return this.getPlayersDataList(this.teamList, true);
     }
   },
@@ -229,7 +210,7 @@ export default {
       let createdAt = game.get('createdAt');
       let tenSecondsAgo = Date.now() - 10 * 1000 //millliseconds
       if (createdAt > tenSecondsAgo) {
-        console.log("new!")
+        //console.log("new!")
         this.notifySound.play();
         return true;
       }
@@ -239,16 +220,6 @@ export default {
 </script>
 
 <style scoped>
-  .board-title {
-    color: white;
-  }
-
-  .abs-center-x {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
   .tdFadeInUp {
     -webkit-animation-duration: 0.4s;
             animation-duration: 0.4s;

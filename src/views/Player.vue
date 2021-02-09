@@ -1,26 +1,5 @@
 <template>
   <div>
-    <navbar>
-      <b-navbar-nav class="abs-center-x">
-        <b-nav-text>
-          <h1 class="text-center mb-0 board-title marker">
-            <router-link :to="'/board/'+$route.params.boardName+'/'+$route.params.boardId">
-              {{$route.params.boardName}}
-            </router-link>
-          </h1>
-        </b-nav-text>
-      </b-navbar-nav>
-      <b-navbar-nav class="ml-auto m-n1">
-        <b-nav-item right>
-          <b-button variant="secondary border-0" size="sm" v-b-modal.shareModal>
-            <b-icon-share-fill/>
-          </b-button>
-        </b-nav-item>
-      </b-navbar-nav>
-    </navbar>
-    <b-modal hide-footer size="lg" id="shareModal" title="Share this board with others">
-      ID:{{$route.params.boardId}}
-    </b-modal>
     <b-container class="mt-4 px-md-0">
       <div v-if="loading">
         <b-card>
