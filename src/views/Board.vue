@@ -83,7 +83,7 @@ export default {
     gameQuery.equalTo("boardId", this.$route.params.boardId)
     let gameSubscription = await gameQuery.subscribe();
     gameSubscription.on('create', game => {
-      this.notifySound.play();
+      //this.notifySound.play();
       this.newestGameId = game.id;
       this.fetchData()
     });
