@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {Howl} from 'howler';
+//import {Howl} from 'howler';
 import AddGame from '../components/AddGame'
 import GameCard from '../components/GameCard'
 import Navbar from '../components/Navbar.vue';
@@ -65,13 +65,13 @@ export default {
       games: [],
       board: Object,
       tournament: undefined,
-      notifySound: Object,
+      //notifySound: Object,
       newestGameId: String,
     }
   },
   created () {
     this.loading = true;
-    this.notifySound = new Howl({ src: ['notify.mp3'] })
+    //this.notifySound = new Howl({ src: ['notify.mp3'] })
     this.fetchData()
   },
   watch: {
@@ -206,7 +206,7 @@ export default {
       }
       return playerList;
     },
-    isNew(game) { //:class="isNew(game) ?'tdFadeInUp':''"
+    /*isNew(game) { //:class="isNew(game) ?'tdFadeInUp':''"
       let createdAt = game.get('createdAt');
       let tenSecondsAgo = Date.now() - 10 * 1000 //millliseconds
       if (createdAt > tenSecondsAgo) {
@@ -214,7 +214,7 @@ export default {
         this.notifySound.play();
         return true;
       }
-    },
+    },*/
   }
 }
 </script>

@@ -6,7 +6,7 @@
     <b-container ref="invite">
       <h1 class="display-2 marker mt-5 text-center">{{$route.params.boardName}}</h1>
       <h3 class="mt-5  text-center">Board Code</h3>
-      <h1 class="display-1  text-center" style="font-family: monospace; margin-top:-25px; margin-bottom:-20px">{{$route.params.boardId}}</h1>
+      <h1 class="display-1  text-center code">{{$route.params.boardId}}</h1>
       <h3 class=" text-center">Enter on rudiboard.netlify.app</h3>
       <br>
       <h3 class=" text-center">Or simply scan the QR-Code:</h3>
@@ -48,6 +48,12 @@ export default {
 </script>
 
 <style scoped>
+.code {
+  font-family: 'Monaco', 'Courier New', monospace; 
+  margin-top:-20px; 
+  margin-bottom:-10px
+}
+
 .qr-logo{
   margin: auto;
   position: absolute;
