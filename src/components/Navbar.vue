@@ -115,14 +115,11 @@ export default {
     copyToClipboard(value) {
       let container = this.$refs.container
       this.$copyText(value, container).then((e) => {
-        this.localMakeToast(`Copied "${value}" to the clipboard!`);
+        this.makeToast(`Copied "${value}" to the clipboard!`);
       }, (error) => {
         console.log('failed to copy:'+e)
       })
     },
-    localMakeToast(message) {
-      this.makeToast(message);
-    }
   },
 }
 </script>
