@@ -180,7 +180,7 @@ export default {
         //console.log('teamsNextRound: '+teamsNextRound);
       }
       if (teamsThisRound.length == 1 && openGames.length == 0) { //if only one team remains and there are no open games, then this team has won!
-        alert(`Team ${teamsThisRound[0]} has won the tournament${this.strTourNameIfSet(this.tournament.get('tourName'))}!`);
+        this.makeToast(`Team ${teamsThisRound[0]} has won the tournament${this.strTourNameIfSet(this.tournament.get('tourName'))}!`);
         this.tournament.set('active', false);
         this.tournament.save().then(() => {
           console.log(`Tounament succesfully canceled.`)

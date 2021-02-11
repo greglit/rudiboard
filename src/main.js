@@ -60,6 +60,17 @@ Vue.mixin({
     randNum(min, max) {
       return Math.random() * (max - min) + min;
     },
+    makeToast(message) {
+      this.$bvToast.toast(message, {
+        //title: ``,
+        autoHideDelay: 2000,
+        appendToast: false,
+        variant: 'success',
+        toaster: 'b-toaster-top-center',
+        solid: true,
+        headerClass: 'd-none'
+      })
+    },
   },
 })
 
