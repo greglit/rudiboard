@@ -13,6 +13,7 @@ import {
   FormGroupPlugin,
   FormInputPlugin,
   FormRadioPlugin,
+  FormSpinbuttonPlugin,
   InputGroupPlugin,
   LayoutPlugin,
   ModalPlugin,
@@ -35,6 +36,7 @@ Vue.use(FormPlugin)
 Vue.use(FormGroupPlugin)
 Vue.use(FormInputPlugin)
 Vue.use(FormRadioPlugin)
+Vue.use(FormSpinbuttonPlugin)
 Vue.use(InputGroupPlugin)
 Vue.use(LayoutPlugin)
 Vue.use(ModalPlugin)

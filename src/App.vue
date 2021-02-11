@@ -22,6 +22,17 @@ export default {
   src: local("TragicMarker"),   url(./assets/fonts/TragicMarker.otf) format("opentype");
 }
 
+html {
+  font-size: 1rem;
+}
+
+@include media-breakpoint-up(sm) {
+  html {
+    font-size: 1.2rem;
+  }
+}
+
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
