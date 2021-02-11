@@ -25,7 +25,7 @@
 
 <script>
 import Navbar from '../components/Navbar.vue';
-import PieChart from '../components/PieChart.vue';
+const PieChart = () => import('../components/PieChart.vue')
 
 export default {
   name: 'Player',

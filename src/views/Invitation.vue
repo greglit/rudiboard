@@ -40,6 +40,7 @@ export default {
   },
   methods: {
     print() {
+      //console.log('drucken!')
       let element = this.$refs.invite;
       html2pdf(element);
     },

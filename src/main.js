@@ -3,11 +3,48 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-//following imports moved to App.vue style section
-//import 'bootstrap/dist/css/bootstrap.css'
-//import 'bootstrap-vue/dist/bootstrap-vue.css'
-Vue.use(BootstrapVue)
+import { 
+  AlertPlugin, 
+  BadgePlugin,
+  ButtonPlugin,
+  ButtonGroupPlugin,
+  CardPlugin,
+  FormPlugin,
+  FormGroupPlugin,
+  FormInputPlugin,
+  FormRadioPlugin,
+  InputGroupPlugin,
+  LayoutPlugin,
+  ModalPlugin,
+  NavPlugin,
+  NavbarPlugin,
+  SkeletonPlugin,
+  SpinnerPlugin,
+  TablePlugin,
+  TabsPlugin,
+  ToastPlugin,
+  IconsPlugin 
+} from 'bootstrap-vue'
+
+Vue.use(AlertPlugin)
+Vue.use(BadgePlugin)
+Vue.use(ButtonPlugin)
+Vue.use(ButtonGroupPlugin)
+Vue.use(CardPlugin)
+Vue.use(FormPlugin)
+Vue.use(FormGroupPlugin)
+Vue.use(FormInputPlugin)
+Vue.use(FormRadioPlugin)
+Vue.use(InputGroupPlugin)
+Vue.use(LayoutPlugin)
+Vue.use(ModalPlugin)
+Vue.use(NavPlugin)
+Vue.use(NavbarPlugin)
+Vue.use(SkeletonPlugin)
+Vue.use(SpinnerPlugin)
+Vue.use(TablePlugin)
+Vue.use(TabsPlugin)
+Vue.use(ToastPlugin)
 Vue.use(IconsPlugin)
 
 import VueClipboard from 'vue-clipboard2'
