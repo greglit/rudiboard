@@ -24,7 +24,7 @@
           class="rounded-0"
         />
       </b-form-group>
-      <b-form-group label="Select team grouping" label-size="sm" :description="teamAlgoDescription[teamAlgoSelected]">
+      <b-form-group label="Select team grouping:" label-size="sm" :description="teamAlgoDescription[teamAlgoSelected]">
         <b-form-radio-group
             v-model="teamAlgoSelected" :options="teamAlgoOptions" :disabled="teamSizeSelected <= 1"
             button-variant="outline-primary" buttons size="sm" class="w-100"

@@ -15,7 +15,7 @@
         <b-col class="px-1">
           <b-form-input required type="tel" :state="validScore1" v-model="game.team1Score" placeholder="Score 1" class="rounded-0"></b-form-input>
         </b-col>
-        <b-col cols="1" class="p-0">:</b-col>
+        <b-col cols="1" class="pt-1 p-0">:</b-col>
         <b-col class="px-1">
           <b-form-input required type="tel" :state="validScore2" v-model="game.team2Score" placeholder="Score 2" class="rounded-0"></b-form-input>
         </b-col>
