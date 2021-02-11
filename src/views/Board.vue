@@ -11,7 +11,7 @@
       <div v-else>
 
         <b-card class="mb-4">
-          <b-tabs pills fill content-class="">
+          <b-tabs pills fill>
             <hr>
             <b-tab title="Add Game" :active="tournament == undefined">
               <add-game :players="playerList"/>

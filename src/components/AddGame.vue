@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form @submit="onSubmit">
-      <b-container class="mt-4 pb-3 px-3">
+      <b-container class="mt-4 pb-3">
       <b-row>
         <b-col>
           Team 1
@@ -12,15 +12,15 @@
         </b-col>
       </b-row>
       <b-row class="">
-        <b-col class="px-1">
+        <b-col class="px-0">
           <vue-tags-input v-model="team1current" :tags="team1" :autocomplete-items="filteredItems"
-            @tags-changed="newTags => team1 = newTags" placeholder="Add members" class="w-100 mw-100"
+            @tags-changed="newTags => team1 = newTags" placeholder="Add members" class="w-100"
             :add-on-key="[',' , 32 , 13]" :autocomplete-min-length="0"
           />
         </b-col>
-        <b-col class="px-1">
+        <b-col class="px-0">
           <vue-tags-input v-model="team2current" :tags="team2" :autocomplete-items="filteredItems"
-            @tags-changed="newTags => team2 = newTags" placeholder="Add members" class="w-100 mw-100"
+            @tags-changed="newTags => team2 = newTags" placeholder="Add members" class="w-100"
             :add-on-key="[',' , 32 , 13]" :autocomplete-min-length="0"
           />
         </b-col>
@@ -31,14 +31,14 @@
         </b-form-invalid-feedback>
       </b-row>
       <b-row class="mb-2">
-        <b-col class="px-1">
+        <b-col class="px-0">
           <b-form-input v-model="team1Score" type="tel" placeholder="Score team 1" class="rounded-0" required :state="validScore1"></b-form-input>
           <b-form-invalid-feedback :state="validScore1">
             Please enter a number.
           </b-form-invalid-feedback>
         </b-col>
-        <b-col cols="1" class="p-0">:</b-col>
-        <b-col class="px-1">
+        <b-col cols="1" class="pt-1 p-0">:</b-col>
+        <b-col class="px-0">
           <b-form-input v-model="team2Score" type="tel" placeholder="Score team 2" class="rounded-0" required :state="validScore2"></b-form-input>
           <b-form-invalid-feedback :state="validScore2">
             Please enter a number.

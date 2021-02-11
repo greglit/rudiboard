@@ -18,7 +18,7 @@
           <h2  class="text-left">Create a new score board</h2>
           <b-form @submit="createBoard">
             <b-form-group>
-              <b-form-input required size="lg" class="" v-model="newBoardName" placeholder="enter score board name"></b-form-input>
+              <b-form-input required size="lg" class="" v-model="newBoardName" placeholder="Enter score board name"></b-form-input>
             </b-form-group>
             <b-button type="submit" variant="success" size="lg">Create!</b-button>
           </b-form>
@@ -30,7 +30,7 @@
           <h2 class="text-left">...or join an existing one!</h2>
           <b-form @submit="joinBoard">
             <b-form-group valid-feedback="" invalid-feedback="Oops! We couldn't find a board with this board code, maybe a typo?" :state="!boardNotFound">
-              <b-form-input required size="lg" v-model="joinBoardID" placeholder="enter board code" @update="boardNotFound=false;"></b-form-input>
+              <b-form-input required size="lg" v-model="joinBoardID" placeholder="Enter board code" @update="boardNotFound=false;"></b-form-input>
             </b-form-group>
             <b-button type="submit" variant="success" size="lg">Join!</b-button>
           </b-form>

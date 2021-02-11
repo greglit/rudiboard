@@ -115,23 +115,15 @@ export default {
     copyToClipboard(value) {
       let container = this.$refs.container
       this.$copyText(value, container).then((e) => {
-        this.makeToast(`Copied "${value}" to the clipboard!`)
+        this.localMakeToast(`Copied "${value}" to the clipboard!`);
       }, (error) => {
         console.log('failed to copy:'+e)
       })
     },
-    makeToast(message) {
-      this.$bvToast.toast(message, {
-        //title: ``,
-        autoHideDelay: 2000,
-        appendToast: false,
-        variant: 'success',
-        toaster: 'b-toaster-top-center',
-        solid: true,
-        headerClass: 'd-none'
-      })
-    },
-  }
+    localMakeToast(message) {
+      this.makeToast(message);
+    }
+  },
 }
 </script>
 
