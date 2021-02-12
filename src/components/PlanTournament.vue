@@ -259,7 +259,7 @@ export default {
       return tourTeams;
     },
     getBalancedTeams(tourPlayersList, teamSizeSelected) {
-      for (var i = 0; i < tourPlayersList.length % teamSizeSelected; i++) {
+      while(tourPlayersList.length % teamSizeSelected != 0) {
         tourPlayersList.splice(this.randNum(0, tourPlayersList.length-1), 1);
       }
       //console.log(tourPlayersList);

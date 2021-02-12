@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
 
 import { 
   AlertPlugin, 
@@ -24,7 +23,6 @@ import {
   TablePlugin,
   TabsPlugin,
   ToastPlugin,
-  IconsPlugin 
 } from 'bootstrap-vue'
 
 Vue.use(AlertPlugin)
@@ -47,7 +45,40 @@ Vue.use(SpinnerPlugin)
 Vue.use(TablePlugin)
 Vue.use(TabsPlugin)
 Vue.use(ToastPlugin)
-Vue.use(IconsPlugin)
+
+import { BIcon } from 'bootstrap-vue'
+Vue.component('b-icon', BIcon)
+import { BIconstack } from 'bootstrap-vue'
+Vue.component('b-iconstack', BIconstack)
+import { BIconEnvelopeOpen } from 'bootstrap-vue'
+Vue.component('b-icon-envelope-open', BIconEnvelopeOpen)
+import { BIconGithub } from 'bootstrap-vue'
+Vue.component('b-icon-github', BIconGithub)
+import { BIconTrashFill } from 'bootstrap-vue'
+Vue.component('b-icon-trash-fill', BIconTrashFill)
+import { BIconTrophy } from 'bootstrap-vue'
+Vue.component('b-icon-trophy', BIconTrophy)
+import { BIconShareFill } from 'bootstrap-vue'
+Vue.component('b-icon-share-fill', BIconShareFill)
+import { BIconLink45deg } from 'bootstrap-vue'
+Vue.component('b-icon-link45deg', BIconLink45deg)
+import { BIconFiles } from 'bootstrap-vue'
+Vue.component('b-icon-files', BIconFiles)
+import { BIconKey } from 'bootstrap-vue'
+Vue.component('b-icon-key', BIconKey)
+import { BIconPrinter } from 'bootstrap-vue'
+Vue.component('b-icon-printer', BIconPrinter)
+import { BIconFlag } from 'bootstrap-vue'
+Vue.component('b-icon-flag', BIconFlag)
+import { BIconArrowUp } from 'bootstrap-vue'
+Vue.component('b-icon-arrow-up', BIconArrowUp)
+import { BIconArrowDown } from 'bootstrap-vue'
+Vue.component('b-icon-arrow-down', BIconArrowDown)
+import { BIconHexagonFill } from 'bootstrap-vue'
+Vue.component('b-icon-hexagon-fill', BIconHexagonFill)
+import { BIconCheckCircle } from 'bootstrap-vue'
+Vue.component('b-icon-check-circle', BIconCheckCircle)
+
 
 import VueClipboard from 'vue-clipboard2'
 //VueClipboard.config.autoSetContainer = true // add this line
@@ -115,6 +146,5 @@ Vue.mixin({
 
 new Vue({
   router,
-  store,
   render: h => h(App)
 }).$mount('#app')

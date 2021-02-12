@@ -6,7 +6,7 @@
         <b-col>
           Team 1
         </b-col>
-        <b-col cols="1" class="p-0">vs.</b-col>
+        <b-col cols="1" class="p-0">vs</b-col>
         <b-col>
           Team 2
         </b-col>
@@ -48,7 +48,7 @@
       </b-container>
       
       <b-button type="submit" variant="rudi" :disabled="validationText != '' || waitForGameAdded">
-        <b-icon v-if="!waitForGameAdded" icon="trophy" class="mr-2"/>
+        <b-icon-trophy v-if="!waitForGameAdded" class="mr-2"/>
         <b-spinner v-else label="Spinning" class="mr-2" small></b-spinner>
         Add Game
       </b-button>
