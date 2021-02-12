@@ -9,7 +9,7 @@
             </b-iconstack>
             <h1 class="marker" style="margin-top:-195px; margin-right: -20px; font-size:200pt; color:white">r</h1>
           </div>
-          <h1 class="text-center marker display-5">This is rudiboard, it's awesome! :D</h1>
+          <h1 class="text-center marker display-5">This is Rudiboard, it's awesome! :D</h1>
           <h5 style="max-width:500px" class="mx-auto">Track <b>games</b> and <b>scores</b> and plan <b>tournaments</b> at the office, in your shared flat or your favorite bar.</h5>
           
           <h5 style="max-width:700px" class="mx-auto">
