@@ -73,8 +73,8 @@
           <b-alert show variant="rudi" class="mt-3">
             <p>Share your thoughts and ideas or report issues:</p>
             <p style="font-size:14pt;">
-              <a href="mailto:gregor.l.wolf@gmail.com">
-                <b-badge class="mr-1" variant="info"><b-icon-envelope-open class="mr-1"/>gregor.l.wolf@gmail.com</b-badge>
+              <a href="mailto:rudiboard@gregl.it">
+                <b-badge class="mr-1" variant="info"><b-icon-envelope-open class="mr-1"/>rudiboard@gregl.it </b-badge>
               </a>
               <a href="https://github.com/greglbub/rudiboard">
                 <b-badge class="mr-1" variant="info"><b-icon-github class="mr-1"/>greglbub/rudiboard</b-badge>
@@ -102,7 +102,7 @@ export default {
   },
   data() {
     return {
-      siteurl : 'rudiboard.netlify.app',
+      siteurl : 'rudiboard.gregl.it',
       showQR : false
     }
   },
