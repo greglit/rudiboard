@@ -29,8 +29,7 @@ export default {
   },
   data() {
     return {
-      siteurl : 'rudiboard.netlify.app',
-      showQR : false
+      siteurl : 'rudiboard.gregl.it',
     }
   },
   computed: {
