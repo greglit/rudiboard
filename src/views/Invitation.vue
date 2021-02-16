@@ -7,7 +7,7 @@
       <h1 class="display-2 marker mt-5 text-center">{{$route.params.boardName}}</h1>
       <h3 class="mt-5  text-center">Board Code</h3>
       <h1 class="display-1  text-center code">{{$route.params.boardId}}</h1>
-      <h3 class=" text-center">Enter on rudiboard.netlify.app</h3>
+      <h3 class=" text-center">Enter on {{siteurl}}</h3>
       <br>
       <h3 class=" text-center">Or simply scan the QR-Code:</h3>
       <b-card class="mt-1 mx-auto" style="width:350px">
