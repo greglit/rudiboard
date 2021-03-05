@@ -76,8 +76,8 @@
               <a href="mailto:rudiboard@gregl.it">
                 <b-badge class="mr-1" variant="info"><b-icon-envelope-open class="mr-1"/>rudiboard@gregl.it </b-badge>
               </a>
-              <a href="https://github.com/greglbub/rudiboard">
-                <b-badge class="mr-1" variant="info"><b-icon-github class="mr-1"/>greglbub/rudiboard</b-badge>
+              <a href="https://github.com/greglit/rudiboard">
+                <b-badge class="mr-1" variant="info"><b-icon-github class="mr-1"/>greglit/rudiboard</b-badge>
               </a>
             </p>
             <p>Share your love and support for Rudiboard:</p>
