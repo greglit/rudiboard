@@ -1,6 +1,10 @@
 # Rudiboard
-Track games and scores and plan tournaments at the office, in your shared flat or your favorite bar.
+Track games and scores and plan tournaments at the office, in your shared flat or your favorite bar.  
 www.rudiboard.gregl.it
+
+* No app install
+* No signup/setup
+* Easy sharing on all devices
 
 ## Project setup
 ```
