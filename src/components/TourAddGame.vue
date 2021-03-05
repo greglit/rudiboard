@@ -6,7 +6,7 @@
         <b-col>
           <team-list :team="game.team1" class="float-right pb-2"/>
         </b-col>
-        <b-col cols="1" class="p-0">vs.</b-col>
+        <b-col cols="1" class="p-0">vs</b-col>
         <b-col class="">
           <team-list :team="game.team2"  class="float-left pb-2"/>
         </b-col>

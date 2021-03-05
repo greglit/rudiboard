@@ -158,12 +158,14 @@ export default {
       var boardQueryResult = await boardQuery.find();
       this.board = boardQueryResult[0]
       
+      this.loading = false;
+
       var tourQuery = new this.$Parse.Query('Tournament');
       tourQuery.equalTo("boardId", this.$route.params.boardId).equalTo("active", true);
       var tournamentQueryResult = await tourQuery.find();
       this.tournament = tournamentQueryResult[0];
 
-      this.loading = false;
+      
     },
     getPlayersDataList(players, playersAreTeams) {
       var playerDict = {};
