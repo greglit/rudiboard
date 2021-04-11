@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!--<canvas ref="canvas"></canvas>-->
     <b-container class="mt-4 px-md-0">
       <div v-if="loading">
         <b-card>
@@ -21,6 +22,7 @@
             </b-tab>
           </b-tabs>
         </b-card>
+        <!--<b-button @click="clickButton()" ref="confettiButton">confetti</b-button>-->
         
         <br>
         <br>
@@ -41,13 +43,13 @@
 </template>
 
 <script>
-//import {Howl} from 'howler';
 import AddGame from '../components/AddGame'
 import GameCard from '../components/GameCard'
 import Navbar from '../components/Navbar.vue';
 import GameList from '../components/GameList.vue';
 import ScoreTable from '../components/ScoreTable.vue';
 import PlanTournament from '../components/PlanTournament.vue';
+//import '../assets/scripts/confetti'
 
 export default {
   name: 'Board',

@@ -7,11 +7,30 @@
       <b-row>
         <b-col>
         <b-table responsive
-          :items="playersData"
+          :items="sortedPlayersData"
           :fields="fields"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          striped  >
+          striped
+          :key="JSON.stringify(sortedPlayersData)"
+            >
+
+          <template #head()="data">
+            <div @click="setSort(data.column)" style="cursor:pointer;">
+              {{ data.label }}
+              <b-badge v-if="data.column == sortFirst">
+                <b-icon-arrow-down v-if="sortFirstDesc"/>
+                <b-icon-arrow-up v-else/>
+                1.
+                <!--<b-icon-x scale="2.0" @click="sortFirst = ''"/>-->
+              </b-badge>
+              <b-badge v-if="data.column == sortSecond">
+                <b-icon-arrow-down v-if="sortSecondDesc"/>
+                <b-icon-arrow-up v-else/>
+                2.
+                <!--<b-icon-x scale="2.0" @click="sortSecond = ''"/>-->
+              </b-badge>
+            </div>
+          </template>
+
           <template v-slot:cell(name)="data">
             <player-badge :name="data.value" />
           </template>
@@ -44,24 +63,69 @@ export default {
     return {
       showMore: false,
       numberItemsDisplayed: 5,
-      sortBy: 'points',
-      sortDesc: true,
+      sortFirst: 'points',
+      sortSecond: 'goalDifference',
+      sortFirstDesc: true,
+      sortSecondDesc: true,
 
       fields: [
-        { key: "name", label: "Name", sortable: true },
-        { key: "points", label: "Points", sortable: true },
-        { key: "goalDifference", label: "Goal Difference", sortable: true },
-        { key: "gamesPlayed", label: "Games Played", sortable: true },
-        { key: "wins", label: "Wins", sortable: true },
-        { key: "draws", label: "Draws", sortable: true },
-        { key: "losses", label: "Losses", sortable: true },
-        { key: "goalsFor", label: "Goals For", sortable: true },
-        { key: "goalsAgainst", label: "Goals Against", sortable: true },
-        { key: "winsToZero", label: "Wins To Zero", sortable: true },
+        { key: "name", label: "Name", sortable: false },
+        { key: "points", label: "Points", sortable: false },
+        { key: "goalDifference", label: "Goal Difference", sortable: false },
+        { key: "gamesPlayed", label: "Games Played", sortable: false },
+        { key: "wins", label: "Wins", sortable: false },
+        { key: "draws", label: "Draws", sortable: false },
+        { key: "losses", label: "Losses", sortable: false },
+        { key: "goalsFor", label: "Goals For", sortable: false },
+        { key: "goalsAgainst", label: "Goals Against", sortable: false },
+        { key: "winsToZero", label: "Wins To Zero", sortable: false },
       ],
     }
   },
+  computed: {
+    sortedPlayersData() {
+      const sorted = this.playersData.sort((a,b) => {
+        const sortVal = this.sortFirstDesc ? b[this.sortFirst] - a[this.sortFirst] : a[this.sortFirst] - b[this.sortFirst]
+        if (sortVal === 0) {
+          return this.sortSecondDesc ? b[this.sortSecond] - a[this.sortSecond] : a[this.sortSecond] - b[this.sortSecond]
+        }
+        return sortVal
+      });
+      return sorted
+    },
+  },
+  methods: {
+    setSort(fieldKey) {
+      if (this.sortFirst === fieldKey) {
+        if (this.sortFirstDesc === false) {
+          this.sortFirst = this.sortSecond;
+          this.sortSecond = '';
+          this.sortFirstDesc = this.sortSecondDesc;
+          this.sortSecondDesc = true;
+        } else {
+          this.sortFirstDesc = !this.sortFirstDesc;
+        }
+      } else if (this.sortSecond === fieldKey) {
+        if (this.sortSecondDesc === false) {
+          this.sortSecond = '';
+          this.sortSecondDesc = true;
+        } else {
+          this.sortSecondDesc = !this.sortSecondDesc;
+        }
+      } else if (this.sortFirst === '') {
+        this.sortFirst = fieldKey;
+      } else if (this.sortFirst !== '' && this.sortSecond === '') {
+        this.sortSecond = fieldKey
+      } else if (this.sortFirst !== '' && this.sortSecond !== '') {
+        this.sortFirst = fieldKey;
+        this.sortFirstDesc = true;
+        this.sortSecond = '';
+        this.sortSecondDesc = true;
+      }
+    }
+  }
 }
+
 </script>
 
 <style scoped>

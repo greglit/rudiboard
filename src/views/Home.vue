@@ -28,7 +28,10 @@
             <b-form-group>
             <b-form-input required size="lg" class="" v-model="newBoardName" placeholder="Score board name"></b-form-input>
             </b-form-group>
-            <b-button type="submit" variant="success" size="lg" style="width:7rem">Create!</b-button>
+            <b-button type="submit" variant="success" size="lg" style="width:9rem" :disabled="awaitCreate">
+              <b-spinner v-if="awaitCreate" label="Loading..." class="mr-2" small/>
+              Create!
+            </b-button>
           </b-form>
         </b-col>
       </b-row>
@@ -40,7 +43,10 @@
             <b-form-group valid-feedback="" invalid-feedback="Whoopsy! We couldn't find a board with this board code, maybe a typo?" :state="!boardNotFound">
               <b-form-input required size="lg" v-model="joinBoardID" placeholder="Board code" @update="boardNotFound=false;"></b-form-input>
             </b-form-group>
-            <b-button type="submit" variant="success" size="lg" style="width:7rem">Join!</b-button>
+            <b-button type="submit" variant="success" size="lg" style="width:9rem" :disabled="awaitJoin">
+              <b-spinner v-if="awaitJoin" label="Loading..." class="mr-2" small/>
+              Join!
+            </b-button>
           </b-form>
         </b-col>
       </b-row>  
@@ -65,14 +71,18 @@ export default {
       joinBoardID : '',
       newBoardName : '',
       boardNotFound : false,
+      awaitJoin : false,
+      awaitCreate : false,
     }
   },
   methods: {
     async joinBoard(e) {
       e.preventDefault();
+      this.awaitJoin = true;
       var boardQuery = new this.$Parse.Query('Board');
       boardQuery.equalTo("boardId", this.joinBoardID);
       var boardQueryResult = await boardQuery.find();
+      this.awaitJoin = false;
       if (boardQueryResult != 0) {
         //console.log('boardfound')
         var board = boardQueryResult[0]
@@ -85,6 +95,7 @@ export default {
     },
     createBoard(e) {
       e.preventDefault();
+      this.awaitCreate = true;
       var board = new this.$Parse.Object('Board', {
         boardName: this.newBoardName, 
         boardId: Math.random().toString(36).substr(2, 5),
@@ -92,8 +103,11 @@ export default {
       board.save()
       .then((board) => {
         this.$router.push(`board/${board.get('boardName')}/${board.get("boardId")}`);
+        this.awaitCreate = false;
       }, (error) => {
-        alert('Failed to create new board, with error code: ' + error.message);
+        console.log('Failed to create new board, with error code: ' + error.message);
+        this.makeToast('Failed to create new board', 'warning')
+        this.awaitCreate = false;
       });
     }
   }

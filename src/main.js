@@ -97,6 +97,9 @@ Vue.config.productionTip = false
 Vue.mixin({
   methods: {
     getTeamNameList(team) {
+      team = team.sort(function (a, b) {
+        return String(a).localeCompare(b);
+      })
       var teamNameList = ''
       for (const [i, name] of team.entries()) {
         teamNameList += name;
@@ -130,12 +133,12 @@ Vue.mixin({
     randNum(min, max) {
       return Math.random() * (max - min) + min;
     },
-    makeToast(message) {
+    makeToast(message, type='success') {
       this.$bvToast.toast(message, {
         //title: ``,
         autoHideDelay: 2000,
         appendToast: false,
-        variant: 'success',
+        variant: type,
         toaster: 'b-toaster-top-center',
         solid: true,
         headerClass: 'd-none'
