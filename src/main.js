@@ -78,6 +78,10 @@ import { BIconHexagonFill } from 'bootstrap-vue'
 Vue.component('b-icon-hexagon-fill', BIconHexagonFill)
 import { BIconCheckCircle } from 'bootstrap-vue'
 Vue.component('b-icon-check-circle', BIconCheckCircle)
+import { BIconSortDown } from 'bootstrap-vue'
+Vue.component('b-icon-sort-down', BIconSortDown)
+import { BIconSortUp } from 'bootstrap-vue'
+Vue.component('b-icon-sort-up', BIconSortUp)
 
 
 import VueClipboard from 'vue-clipboard2'

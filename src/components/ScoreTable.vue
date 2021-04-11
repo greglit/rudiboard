@@ -6,35 +6,33 @@
     <b-container style="overflow:hidden;" class="m-0 p-0">
       <b-row>
         <b-col>
-        <b-table responsive
-          :items="sortedPlayersData"
-          :fields="fields"
-          striped
-          :key="JSON.stringify(sortedPlayersData)"
-            >
+<b-table responsive
+  :items="sortedPlayersData"
+  :fields="fields"
+  striped
+  :key="JSON.stringify(sortedPlayersData)"
+    >
 
-          <template #head()="data">
-            <div @click="setSort(data.column)" style="cursor:pointer;">
-              {{ data.label }}
-              <b-badge v-if="data.column == sortFirst">
-                <b-icon-arrow-down v-if="sortFirstDesc"/>
-                <b-icon-arrow-up v-else/>
-                1.
-                <!--<b-icon-x scale="2.0" @click="sortFirst = ''"/>-->
-              </b-badge>
-              <b-badge v-if="data.column == sortSecond">
-                <b-icon-arrow-down v-if="sortSecondDesc"/>
-                <b-icon-arrow-up v-else/>
-                2.
-                <!--<b-icon-x scale="2.0" @click="sortSecond = ''"/>-->
-              </b-badge>
-            </div>
-          </template>
+  <template #head()="data">
+    <div @click="setSort(data.column)" style="cursor:pointer;">
+      {{ data.label }}
+      <b-badge v-if="data.column == sortFirst">
+        <b-icon-sort-down v-if="sortFirstDesc"/>
+        <b-icon-sort-up v-else/>
+        <span v-if="sortSecond != ''">1. prio</span>
+      </b-badge>
+      <b-badge v-if="data.column == sortSecond">
+        <b-icon-sort-down v-if="sortSecondDesc"/>
+        <b-icon-sort-up v-else/>
+        2. prio
+      </b-badge>
+    </div>
+  </template>
 
-          <template v-slot:cell(name)="data">
-            <player-badge :name="data.value" />
-          </template>
-        </b-table>
+  <template v-slot:cell(name)="data">
+    <player-badge :name="data.value" />
+  </template>
+</b-table>
         </b-col>
       </b-row>
     </b-container>
@@ -67,6 +65,7 @@ export default {
       sortSecond: 'goalDifference',
       sortFirstDesc: true,
       sortSecondDesc: true,
+
 
       fields: [
         { key: "name", label: "Name", sortable: false },
